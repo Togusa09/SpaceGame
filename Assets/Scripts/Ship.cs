@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
@@ -11,6 +12,8 @@ public class Ship : MonoBehaviour
     private Vector3 _destination;
 
     private Engine[] _engines;
+
+    public bool Selected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +28,10 @@ public class Ship : MonoBehaviour
         _destination = transform.position;
 
         _engines = GetComponentsInChildren<Engine>();
+
+        gameObject.DrawCircle(4, 0.1f);
+        var line = GetComponent<LineRenderer>();
+        line.enabled = false;
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -39,6 +46,22 @@ public class Ship : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var line = GetComponent<LineRenderer>();
+        if (Selected)
+        {
+            if (line != null)
+            {
+                line.enabled = true;
+            }
+        }
+        else
+        {
+            if (line != null)
+            {
+                line.enabled = false;
+            }
+        }
+
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
 
         var distance = Vector3.Distance(_destination, transform.position);
@@ -115,5 +138,10 @@ public class Ship : MonoBehaviour
     public void MoveTo(Vector3 destination)
     {
         _destination = destination;
+    }
+
+    void OnMouseDown()
+    {
+        SelectionManager.Instance.SelectShip(this);
     }
 }

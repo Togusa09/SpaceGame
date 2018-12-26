@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts;
 using UnityEngine;
 
 public class Control : MonoBehaviour
@@ -7,18 +6,25 @@ public class Control : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        moveDisk = new GameObject();
     }
-
-    public Ship CurrentShip;
 
     private bool active;
     private Vector3? hitPoint = null;
+
+    private GameObject moveDisk;
+
     void Update()
     {
+        var selectedShip = SelectionManager.Instance.GetSelectedShip();
+        if (selectedShip == null)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
-            var movePlane = new Plane(Vector3.up, transform.position);
+            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float enter;
 
@@ -32,75 +38,51 @@ public class Control : MonoBehaviour
 
         if (active)
         {
-            var movePlane = new Plane(Vector3.up, transform.position);
+            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (movePlane.Raycast(ray, out var enter))
             {
                 hitPoint = ray.GetPoint(enter);
 
-                var distance = Vector3.Distance(CurrentShip.transform.position, hitPoint.Value);
-                DrawCircle(gameObject, distance, 0.1f);
+                var distance = Vector3.Distance(selectedShip.transform.position, hitPoint.Value);
+
+                moveDisk.transform.parent = selectedShip.transform;
+                moveDisk.transform.localPosition = Vector3.zero;
+                moveDisk.DrawCircle(distance, 0.1f);
             }
         }
         else
         {
             hitPoint = null;
-            HideCircle();
+            HideCircle(moveDisk.gameObject);
         }
 
-        if (Input.GetMouseButtonDown(0) && hitPoint.HasValue && CurrentShip != null)
+        if (Input.GetMouseButtonDown(0) && hitPoint.HasValue && selectedShip != null)
         {
-            CurrentShip.MoveTo(hitPoint.Value);
+            selectedShip.MoveTo(hitPoint.Value);
             hitPoint = null;
             active = false;
-            HideCircle();
+            HideCircle(moveDisk.gameObject);
         }
     }
 
     public void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(transform.position, new Vector3(10, 0.1f, 10));
         if (hitPoint.HasValue)
         {
             Gizmos.DrawWireSphere(hitPoint.Value, 0.5f);
         }
     }
 
-    private void HideCircle()
+    private void HideCircle(GameObject gameObject)
     {
-        var line = GetComponent<LineRenderer>();
+        var line = gameObject.GetComponent<LineRenderer>();
         if (line != null)
         {
             line.enabled = false;
         }
     }
 
-    public static void DrawCircle(GameObject container, float radius, float lineWidth)
-    {
-        var segments = 360;
-        var line = container.GetComponent<LineRenderer>();
-        if (line == null)
-        {
-            line = container.AddComponent<LineRenderer>();
-        }
-
-        line.enabled = true;
-
-        line.useWorldSpace = false;
-        line.startWidth = lineWidth;
-        line.endWidth = lineWidth;
-        line.positionCount = segments + 1;
-
-        var pointCount = segments + 1; // add extra point to make startpoint and endpoint the same to close the circle
-        var points = new Vector3[pointCount];
-
-        for (int i = 0; i < pointCount; i++)
-        {
-            var rad = Mathf.Deg2Rad * (i * 360f / segments);
-            points[i] = new Vector3(Mathf.Sin(rad) * radius, 0, Mathf.Cos(rad) * radius);
-        }
-
-        line.SetPositions(points);
-    }
+    
 }
