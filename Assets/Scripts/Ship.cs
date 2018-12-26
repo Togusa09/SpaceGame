@@ -156,6 +156,7 @@ public class Ship : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
+        Debug.Log("Moving to " + destination);
         _destination = destination;
     }
 

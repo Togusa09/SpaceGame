@@ -15,4 +15,11 @@ public class Target : MonoBehaviour
     {
         
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Projectile hit");
+        Destroy(collision.gameObject);
+
+    }
 }

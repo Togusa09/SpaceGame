@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
@@ -10,6 +8,8 @@ public class Turret : MonoBehaviour
     private Transform _barrelTransform;
     public float _angle;
     private float _dir = 2;
+
+    public Shell ShellPrefab;
     
     void Start()
     {
@@ -19,8 +19,28 @@ public class Turret : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TrackTarget();
-        //UpDown();
+        var targetLocked = TrackTarget();
+
+        if (targetLocked)
+        {
+            var time = Time.time;
+            if ((time - _lastFireTime) > _fireRate)
+            {
+                _lastFireTime = time;
+                FireCannon();
+            }
+        }
+    }
+
+    private float _lastFireTime;
+    private float _fireRate = 1f;
+    private float _shellVelocity = 1f;
+
+    private void FireCannon()
+    {
+        var shell = Instantiate(ShellPrefab, _barrelTransform.position, _barrelTransform.rotation);
+        var rigidBody = shell.GetComponent<Rigidbody>();
+        rigidBody.velocity = _barrelTransform.transform.forward * _shellVelocity;
     }
 
     private Vector3 _turretCurrent;
@@ -31,12 +51,16 @@ public class Turret : MonoBehaviour
 
     private float _targetDistance;
 
-    private void TrackTarget()
+
+
+    
+
+    private bool TrackTarget()
     {
         _turretCurrent = transform.forward;
         _barrelCurrent = _barrelTransform.forward;
 
-        if (Target == null) return;
+        if (Target == null) return false;
 
         Vector3 relativePos = Target.transform.position - transform.position;
         _targetDistance = relativePos.magnitude;
@@ -47,10 +71,8 @@ public class Turret : MonoBehaviour
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
         Quaternion rotation = Quaternion.LookRotation(turretDirection, transform.up);
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
-
        
         // Set barrel angle
-
         var barrelDirection = Vector3.ProjectOnPlane(relativePos, transform.right);
 
         var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
@@ -63,8 +85,9 @@ public class Turret : MonoBehaviour
         {
             var barrelRotation = Quaternion.Euler(0, -90, 0);
             _barrelTransform.localRotation = Quaternion.Lerp(_barrelTransform.localRotation, barrelRotation, Time.deltaTime * Speed);
-            
         }
+
+        return Vector3.Angle(_barrelCurrent, relativePos) < 10.0f;
     }
 
     private void OnDrawGizmos()
@@ -72,9 +95,12 @@ public class Turret : MonoBehaviour
         var originalColour = Gizmos.color;
 
         Gizmos.color = Color.green;
-        
-        Gizmos.DrawRay(_barrelTransform.position, _barrelCurrent.normalized * _targetDistance);
 
+        if (_barrelTransform != null)
+        {
+            Gizmos.DrawRay(_barrelTransform.position, _barrelCurrent.normalized * _targetDistance);
+        }
+        
         Gizmos.color = Color.blue;
         Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 2);
 
