@@ -23,24 +23,61 @@ public class Turret : MonoBehaviour
         //UpDown();
     }
 
+    private Vector3 _turretCurrent;
+    private Vector3 _turretTarget;
+
+    private Vector3 _barrelCurrent;
+    private Vector3 _barrelTarget;
+
+    private float _targetDistance;
+
     private void TrackTarget()
     {
-        Vector3 relativePos = transform.position - Target.transform.position;
+        _turretCurrent = transform.forward;
+        _barrelCurrent = _barrelTransform.forward;
+
+        Vector3 relativePos = Target.transform.position - transform.position;
+        _targetDistance = relativePos.magnitude;
+
+        var turrentPlane = new Plane(transform.up, transform.position);
 
         // Rotate turret
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
         Quaternion rotation = Quaternion.LookRotation(turretDirection, transform.up);
-
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
 
-        
-
+       
         // Set barrel angle
-        var barrelDirection = Vector3.ProjectOnPlane(relativePos, transform.right);
-        Quaternion barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up) * Quaternion.Euler(0, 90, 0);
-        _barrelTransform.rotation = Quaternion.Lerp(_barrelTransform.rotation, barrelRotation, Time.deltaTime * Speed);
 
-        var angle = Quaternion.Angle(barrelRotation, Quaternion.AngleAxis(0, transform.up));
+        var barrelDirection = Vector3.ProjectOnPlane(relativePos, transform.right);
+
+        var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
+        Debug.Log(aimAngle);
+        if (aimAngle >= 0 && aimAngle <= 90)
+        {
+            Quaternion barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up);
+            _barrelTransform.rotation = Quaternion.Lerp(_barrelTransform.rotation, barrelRotation, Time.deltaTime * Speed);
+        }
+        else
+        {
+            var barrelRotation = Quaternion.Euler(0, -90, 0);
+            _barrelTransform.localRotation = Quaternion.Lerp(_barrelTransform.localRotation, barrelRotation, Time.deltaTime * Speed);
+            
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        var originalColour = Gizmos.color;
+
+        Gizmos.color = Color.green;
+        
+        Gizmos.DrawRay(_barrelTransform.position, _barrelCurrent.normalized * _targetDistance);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 2);
+
+        Gizmos.color = originalColour;
     }
 
     private void UpDown()

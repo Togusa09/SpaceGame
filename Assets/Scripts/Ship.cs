@@ -40,13 +40,15 @@ public class Ship : MonoBehaviour
         var distance = Vector3.Distance(_destination, transform.position);
 
         var dirVector = transform.position - _destination;
+
+        if (dirVector == Vector3.zero) return;
+
         var direction = Quaternion.LookRotation(dirVector, Vector3.up);
 
         if (Mathf.Abs(distance) > 0.1f)
         { 
             // Lerp rotation
             
-
             transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * turnSpeed);
         }
 
