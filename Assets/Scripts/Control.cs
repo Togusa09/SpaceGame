@@ -28,13 +28,14 @@ public class Control : MonoBehaviour
             return;
         }
 
+        var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
         if (Input.GetMouseButtonDown(1))
         {
             var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             float enter;
 
-            if (movePlane.Raycast(ray, out enter))
+            if (movePlane.Raycast(mouseRay, out enter))
             {
                 _active = !_active;
             }
@@ -42,32 +43,28 @@ public class Control : MonoBehaviour
 
         if (_active)
         {
-            var mousePosition = Input.mousePosition;
-
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift) && Camera.current != null)
             {
                 var verticalPlane = new Plane(Camera.current.transform.forward, _hitPoint);
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (verticalPlane.Raycast(ray, out var enter))
+                if (verticalPlane.Raycast(mouseRay, out var enter))
                 {
-                    var raisedPoint = ray.GetPoint(enter);
+                    var raisedPoint = mouseRay.GetPoint(enter);
                     _verticalOffset = raisedPoint.y - _hitPoint.y;
                 }
             }
             else
             {
                 var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (movePlane.Raycast(ray, out var enter))
+                if (movePlane.Raycast(mouseRay, out var enter))
                 {
-                    _hitPoint = ray.GetPoint(enter);
+                    _hitPoint = mouseRay.GetPoint(enter);
 
                     var distance = Vector3.Distance(selectedShip.transform.position, _hitPoint);
                     
-
                     moveDisk.transform.parent = selectedShip.transform;
+                    moveDisk.transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
                     moveDisk.transform.localPosition = Vector3.zero;
                     moveDisk.DrawCircle(distance, 0.1f);
                 }
