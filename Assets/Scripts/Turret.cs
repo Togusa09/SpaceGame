@@ -36,10 +36,12 @@ public class Turret : MonoBehaviour
         _turretCurrent = transform.forward;
         _barrelCurrent = _barrelTransform.forward;
 
+        if (Target == null) return;
+
         Vector3 relativePos = Target.transform.position - transform.position;
         _targetDistance = relativePos.magnitude;
 
-        var turrentPlane = new Plane(transform.up, transform.position);
+        //var turretPlane = new Plane(transform.up, transform.position);
 
         // Rotate turret
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
@@ -101,6 +103,10 @@ public class Turret : MonoBehaviour
 
     public void SetTarget(Target target)
     {
-        Target = target;
+        if (Target != target)
+        {
+            Debug.Log("Updating target to " + target);
+            Target = target;
+        }
     }
 }

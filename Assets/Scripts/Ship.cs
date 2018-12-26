@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class Ship : MonoBehaviour
     public Turret TurretPrefab;
     public Target Target;
 
-    private List<Turret> _turrets;
+    private List<Turret> _turrets = new List<Turret>();
     private Vector3 _destination;
 
     private Engine[] _engines;
@@ -23,13 +24,14 @@ public class Ship : MonoBehaviour
         {
             var turret = AttachTurret(node);
             turret.SetTarget(Target);
+            _turrets.Add(turret);
         }
 
         _destination = transform.position;
 
         _engines = GetComponentsInChildren<Engine>();
 
-        gameObject.DrawCircle(4, 0.1f);
+        gameObject.DrawCircle(2, 0.1f);
         var line = GetComponent<LineRenderer>();
         line.enabled = false;
     }
@@ -40,28 +42,32 @@ public class Ship : MonoBehaviour
         return turret;
     }
 
-    private float turnSpeed = 10.0f;
-    private float moveSpeed = 0.01f;
+    public float turnSpeed = 10.0f;
+    public float moveSpeed = 0.01f;
+    public float targetingRange = 8.0f;
+
 
     // Update is called once per frame
     void Update()
     {
-        var line = GetComponent<LineRenderer>();
-        if (Selected)
-        {
-            if (line != null)
-            {
-                line.enabled = true;
-            }
-        }
-        else
-        {
-            if (line != null)
-            {
-                line.enabled = false;
-            }
-        }
+        ShowLineIfSelected();
+        ProcessMovement();
 
+        var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
+        var targets = targetsInRange.Select(x => x.GetComponent<Target>()).Where(x => x != null).ToList();
+
+        var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
+            .FirstOrDefault();
+
+        foreach (var turret in _turrets)
+        {
+            turret.SetTarget(closestTarget);
+        }
+        
+    }
+
+    private void ProcessMovement()
+    {
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
 
         var distance = Vector3.Distance(_destination, transform.position);
@@ -81,9 +87,9 @@ public class Ship : MonoBehaviour
         var direction = Quaternion.LookRotation(dirVector, Vector3.up);
 
         if (Mathf.Abs(distance) > 0.1f)
-        { 
+        {
             // Lerp rotation
-            
+
             transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * turnSpeed);
         }
 
@@ -95,6 +101,25 @@ public class Ship : MonoBehaviour
             foreach (var engine in _engines)
             {
                 engine.StartEngine();
+            }
+        }
+    }
+
+    private void ShowLineIfSelected()
+    {
+        var line = GetComponent<LineRenderer>();
+        if (Selected)
+        {
+            if (line != null)
+            {
+                line.enabled = true;
+            }
+        }
+        else
+        {
+            if (line != null)
+            {
+                line.enabled = false;
             }
         }
     }
@@ -120,20 +145,14 @@ public class Ship : MonoBehaviour
         var distance = Vector3.Distance(_destination, transform.position);
         if (Mathf.Abs(distance) > 0.1f)
         {
-            Gizmos.DrawWireSphere(_destination, 2.0f);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(_destination, 1.0f);
         }
-    }
 
-    //public Transform FindTransform(Transform parent, string name)
-    //{
-    //    if (parent.name.Equals(name)) return parent;
-    //    foreach (Transform child in parent)
-    //    {
-    //        Transform result = FindTransform(child, name);
-    //        if (result != null) return result;
-    //    }
-    //    return null;
-    //}
+        Gizmos.color = Color.blue;
+        
+        Gizmos.DrawWireSphere(transform.position, targetingRange);
+    }
 
     public void MoveTo(Vector3 destination)
     {

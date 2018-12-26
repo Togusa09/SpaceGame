@@ -58,7 +58,7 @@ public class Control : MonoBehaviour
             HideCircle(moveDisk.gameObject);
         }
 
-        if (Input.GetMouseButtonDown(0) && hitPoint.HasValue && selectedShip != null)
+        if (Input.GetMouseButtonDown(0) && hitPoint.HasValue)
         {
             selectedShip.MoveTo(hitPoint.Value);
             hitPoint = null;
