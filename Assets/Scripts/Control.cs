@@ -9,10 +9,16 @@ public class Control : MonoBehaviour
         moveDisk = new GameObject();
     }
 
-    private bool active;
-    private Vector3? hitPoint = null;
+    
 
     private GameObject moveDisk;
+
+
+    private bool _active;
+    private Vector3 _hitPoint;
+
+    //private Vector3 _startingShiftMousePosition;
+    private float _verticalOffset;
 
     void Update()
     {
@@ -30,48 +36,65 @@ public class Control : MonoBehaviour
 
             if (movePlane.Raycast(ray, out enter))
             {
-                active = !active;
+                _active = !_active;
             }
         }
 
-        hitPoint = null;
-
-        if (active)
+        if (_active)
         {
-            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var mousePosition = Input.mousePosition;
 
-            if (movePlane.Raycast(ray, out var enter))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                hitPoint = ray.GetPoint(enter);
+                var verticalPlane = new Plane(Camera.current.transform.forward, _hitPoint);
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                var distance = Vector3.Distance(selectedShip.transform.position, hitPoint.Value);
-
-                moveDisk.transform.parent = selectedShip.transform;
-                moveDisk.transform.localPosition = Vector3.zero;
-                moveDisk.DrawCircle(distance, 0.1f);
+                if (verticalPlane.Raycast(ray, out var enter))
+                {
+                    var raisedPoint = ray.GetPoint(enter);
+                    _verticalOffset = raisedPoint.y - _hitPoint.y;
+                }
             }
+            else
+            {
+                var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (movePlane.Raycast(ray, out var enter))
+                {
+                    _hitPoint = ray.GetPoint(enter);
+
+                    var distance = Vector3.Distance(selectedShip.transform.position, _hitPoint);
+                    
+
+                    moveDisk.transform.parent = selectedShip.transform;
+                    moveDisk.transform.localPosition = Vector3.zero;
+                    moveDisk.DrawCircle(distance, 0.1f);
+                }
+            }
+            
         }
         else
         {
-            hitPoint = null;
+            _verticalOffset = 0;
             HideCircle(moveDisk.gameObject);
         }
 
-        if (Input.GetMouseButtonDown(0) && hitPoint.HasValue)
+        if (Input.GetMouseButtonDown(0) && _active)
         {
-            selectedShip.MoveTo(hitPoint.Value);
-            hitPoint = null;
-            active = false;
+            
+            selectedShip.MoveTo(_hitPoint + new Vector3(0, _verticalOffset, 0));
+            _active = false;
+            _verticalOffset = 0;
             HideCircle(moveDisk.gameObject);
         }
     }
 
     public void OnDrawGizmos()
     {
-        if (hitPoint.HasValue)
+        if (_active)
         {
-            Gizmos.DrawWireSphere(hitPoint.Value, 0.5f);
+            Gizmos.DrawWireSphere(_hitPoint + new Vector3(0, _verticalOffset, 0), 0.5f);
         }
     }
 
