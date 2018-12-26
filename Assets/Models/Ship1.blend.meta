@@ -25,6 +25,10 @@ ModelImporter:
     100038: TurretC1_002
     100040: TurretC1_003
     100042: TurretC1_004
+    100044: EngineCenter
+    100046: EngineLeft
+    100048: EngineRight
+    100050: ShipBody
     400000: Cube
     400002: Cylinder
     400004: Cylinder_001
@@ -47,20 +51,44 @@ ModelImporter:
     400038: TurretC1_002
     400040: TurretC1_003
     400042: TurretC1_004
+    400044: EngineCenter
+    400046: EngineLeft
+    400048: EngineRight
+    400050: ShipBody
     2100000: unnamed
     2100002: Material
     2300000: Cube
     2300002: Cylinder
     2300004: Cylinder_001
     2300006: Cylinder_002
+    2300008: EngineCenter
+    2300010: EngineLeft
+    2300012: EngineRight
+    2300014: ShipBody
     3300000: Cube
     3300002: Cylinder
     3300004: Cylinder_001
     3300006: Cylinder_002
+    3300008: EngineCenter
+    3300010: EngineLeft
+    3300012: EngineRight
+    3300014: ShipBody
     4300000: Cylinder_002
     4300002: Cylinder_001
     4300004: Cylinder
     4300006: Cube
+    4300008: EngineRight
+    4300010: EngineLeft
+    4300012: EngineCenter
+    4300014: ShipBody
+    6400000: Cube
+    6400002: Cylinder
+    6400004: Cylinder_001
+    6400006: Cylinder_002
+    6400008: EngineCenter
+    6400010: EngineLeft
+    6400012: EngineRight
+    6400014: ShipBody
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
@@ -96,7 +124,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1

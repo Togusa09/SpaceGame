@@ -10,6 +10,8 @@ public class Ship : MonoBehaviour
     private List<Turret> _turrets;
     private Vector3 _destination;
 
+    private Engine[] _engines;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,8 @@ public class Ship : MonoBehaviour
         }
 
         _destination = transform.position;
+
+        _engines = GetComponentsInChildren<Engine>();
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -41,7 +45,15 @@ public class Ship : MonoBehaviour
 
         var dirVector = transform.position - _destination;
 
-        if (dirVector == Vector3.zero) return;
+        if (dirVector == Vector3.zero)
+        {
+            foreach (var engine in _engines)
+            {
+                engine.StopEngine();
+            }
+            return;
+        }
+
 
         var direction = Quaternion.LookRotation(dirVector, Vector3.up);
 
@@ -55,7 +67,12 @@ public class Ship : MonoBehaviour
         var remainingAngle = Quaternion.Angle(transform.rotation, direction);
         if (Mathf.Abs(remainingAngle) < 2)
         {
-            transform.position = Vector3. MoveTowards(transform.position, _destination, moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, _destination, moveSpeed);
+
+            foreach (var engine in _engines)
+            {
+                engine.StartEngine();
+            }
         }
     }
 
