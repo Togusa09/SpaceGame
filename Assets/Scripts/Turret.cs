@@ -78,7 +78,7 @@ public class Turret : MonoBehaviour
         var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
         if (aimAngle >= 0 && aimAngle <= 90)
         {
-            Quaternion barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up);
+            var barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up);
             _barrelTransform.rotation = Quaternion.Lerp(_barrelTransform.rotation, barrelRotation, Time.deltaTime * Speed);
         }
         else

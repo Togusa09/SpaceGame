@@ -12,7 +12,7 @@ public class CameraControl : MonoBehaviour
     }
 
 
-    private Vector3 lastMousePosition;
+    private Vector3 _lastMousePosition;
 
     // Update is called once per frame
     void Update()

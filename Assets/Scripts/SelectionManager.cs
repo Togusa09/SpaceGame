@@ -5,12 +5,7 @@
         private static SelectionManager _instance;
         public static SelectionManager Instance
         {
-            get
-            {
-                if (_instance == null) _instance = new SelectionManager();
-
-                return _instance;
-            }
+            get { return _instance ?? (_instance = new SelectionManager()); }
         }
 
 
