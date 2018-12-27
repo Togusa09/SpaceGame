@@ -31,7 +31,7 @@ public class Ship : MonoBehaviour
 
         _engines = GetComponentsInChildren<Engine>();
 
-        gameObject.DrawCircle(2, 0.1f);
+        gameObject.DrawCircle(2, 0.1f, Color.green);
         var line = GetComponent<LineRenderer>();
         line.enabled = false;
     }

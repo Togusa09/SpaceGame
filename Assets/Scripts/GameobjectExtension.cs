@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts
 {
     public static class GameobjectExtension
     {
-        public static void DrawCircle(this GameObject container, float radius, float lineWidth)
+        public static void DrawCircle(this GameObject container, float radius, float lineWidth, Color colour)
         {
             var segments = 360;
             var line = container.GetComponent<LineRenderer>();
@@ -19,6 +14,7 @@ namespace Assets.Scripts
             }
 
             line.enabled = true;
+            line.material.color = colour;
 
             line.useWorldSpace = false;
             line.startWidth = lineWidth;
