@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Ship : MonoBehaviour
+public class Ship : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
     public Turret TurretPrefab;
     public Target Target;
@@ -161,8 +162,18 @@ public class Ship : MonoBehaviour
         _destination = destination;
     }
 
-    void OnMouseDown()
+    //void OnMouseDown()
+    //{
+    //    SelectionManager.Instance.SelectShip(this);
+    //}
+
+    public void OnPointerUp(PointerEventData eventData)
     {
         SelectionManager.Instance.SelectShip(this);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        
     }
 }

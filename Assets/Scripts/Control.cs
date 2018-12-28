@@ -1,12 +1,14 @@
 ﻿using Assets.Scripts;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Control : MonoBehaviour
+public class Control : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 {
     public Color UiColor = Color.green;
 
     void Start()
     {
+
         _moveDisk = new GameObject("MoveDisk");
         _planeCursorTop = new GameObject("PlaneCursor");
         _planeCursorTop.DrawCircle(1, 0.1f, UiColor);
@@ -25,7 +27,9 @@ public class Control : MonoBehaviour
         lineRenderer.material.color = UiColor;
 
         _moveDisk.SetActive(false);
+
     }
+
 
     private GameObject _moveDisk;
     private GameObject _planeCursorTop;
@@ -152,5 +156,15 @@ public class Control : MonoBehaviour
     public void OnDrawGizmos()
     {
   
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        Debug.Log("Pointer Up");
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        Debug.Log("Pointer Down");
     }
 }
