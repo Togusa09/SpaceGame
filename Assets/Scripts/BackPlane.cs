@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BackPlane : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class BackPlane : MonoBehaviour//, IPointerUpHandler, IPointerDownHandler
 {
     // Start is called before the first frame update
     void Start()
@@ -17,13 +17,13 @@ public class BackPlane : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
         
     }
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Debug.Log("Pointer Up");
-    }
+    //public void OnPointerUp(PointerEventData eventData)
+    //{
+    //    Debug.Log("Pointer Up");
+    //}
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Debug.Log("Pointer Down");
-    }
+    //public void OnPointerDown(PointerEventData eventData)
+    //{
+    //    Debug.Log("Pointer Down");
+    //}
 }

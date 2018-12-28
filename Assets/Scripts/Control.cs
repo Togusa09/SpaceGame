@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Control : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
+public class Control : MonoBehaviour, IPointerUpHandler, IPointerDownHandler, IMoveHandler
 {
     public Color UiColor = Color.green;
 
@@ -64,31 +64,31 @@ public class Control : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        if (Input.GetMouseButtonUp(1))
-        {
-            // Checks that the movement plane for the ship is in view
-            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
-            if (movePlane.Raycast(mouseRay, out _))
-            {
-                if (_active)
-                {
-                    DeactivateMoveDisk();
-                }
-                else
-                {
-                    ActivateMoveDisc();
-                }
-            }
-        }
+        //if (Input.GetMouseButtonUp(1))
+        //{
+        //    // Checks that the movement plane for the ship is in view
+        //    var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+        //    if (movePlane.Raycast(mouseRay, out _))
+        //    {
+        //        if (_active)
+        //        {
+        //            DeactivateMoveDisk();
+        //        }
+        //        else
+        //        {
+        //            ActivateMoveDisc();
+        //        }
+        //    }
+        //}
 
         if (!_active) return;
         
-        if (Input.GetMouseButtonUp(0))
-        {
-            selectedShip.MoveTo(HitPoint);
-            DeactivateMoveDisk();
-            return;
-        }
+        //if (Input.GetMouseButtonUp(0))
+        //{
+        //    selectedShip.MoveTo(HitPoint);
+        //    DeactivateMoveDisk();
+        //    return;
+        //}
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -160,11 +160,47 @@ public class Control : MonoBehaviour, IPointerUpHandler, IPointerDownHandler
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("Pointer Up");
+        var selectedShip = SelectionManager.Instance.GetSelectedShip();
+        if (selectedShip == null)
+        {
+            return;
+        }
+
+        var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+            if (movePlane.Raycast(mouseRay, out _))
+            {
+                if (_active)
+                {
+                    DeactivateMoveDisk();
+                }
+                else
+                {
+                    ActivateMoveDisc();
+                }
+            }
+        }
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            if (_active)
+            {
+                selectedShip.MoveTo(HitPoint);
+                DeactivateMoveDisk();
+            }
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         Debug.Log("Pointer Down");
+    }
+
+    public void OnMove(AxisEventData eventData)
+    {
+        Debug.Log("Moving");
     }
 }
