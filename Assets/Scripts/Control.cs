@@ -68,7 +68,11 @@ public class Control : MonoBehaviour
             var selectedShip = selectionManager.GetSelectedShip();
             var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
 
-            if (!_moveDisk.IsActive)
+            if (targetTarget != null)
+            {
+                selectedShip.SetTarget(targetTarget);
+            }
+            else if (!_moveDisk.IsActive)
             {
                 // Checks that the movement plane for the ship is in view. If the camera is below the plane of movement,
                 // the disk can't be show. Could be dealt with using advanced behaviours, but just keeping simple for moment

@@ -56,16 +56,22 @@ public class Ship : MonoBehaviour
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
         var targets = targetsInRange.Select(x => x.GetComponent<Target>()).Where(x => x != null).ToList();
 
-        var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
-            .FirstOrDefault();
+        //var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
+        //    .FirstOrDefault();
 
-        foreach (var turret in _turrets)
-        {
-            turret.SetTarget(closestTarget);
-        }
-        
+        //foreach (var turret in _turrets)
+        //{
+        //    turret.SetTarget(closestTarget);
+        //}
     }
 
+    public void SetTarget(Target target)
+    {
+        foreach (var turret in _turrets)
+        {
+            turret.SetTarget(target);
+        }
+    }
 
     private void ProcessMovement()
     {
@@ -83,7 +89,6 @@ public class Ship : MonoBehaviour
             }
             return;
         }
-
 
         var direction = Quaternion.LookRotation(dirVector, Vector3.up);
 
