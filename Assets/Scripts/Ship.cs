@@ -160,9 +160,4 @@ public class Ship : MonoBehaviour
         Debug.Log("Moving to " + destination);
         _destination = destination;
     }
-
-    void OnMouseDown()
-    {
-        SelectionManager.Instance.SelectShip(this);
-    }
 }

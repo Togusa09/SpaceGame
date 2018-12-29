@@ -26,6 +26,8 @@ public class MoveDisk : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public bool IsActive => gameObject.activeSelf;
+
     private GameObject _planeCursorTop;
     private GameObject _planeCursorBottom;
     private GameObject _verticalConnectingLine;

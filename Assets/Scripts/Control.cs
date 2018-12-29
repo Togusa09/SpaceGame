@@ -14,9 +14,6 @@ public class Control : MonoBehaviour
 
     private MoveDisk _moveDisk;
 
-
-    private bool _moveDiskActive;
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -24,24 +21,37 @@ public class Control : MonoBehaviour
             StartDebounce();
         }
 
-        var selectedShip = SelectionManager.Instance.GetSelectedShip();
-        if (selectedShip == null)
-        {
-            return;
-        }
-
+        var selectionManager = SelectionManager.Instance;
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        // Find out if mouse is current over a ship
+        Ship targetShip = null;
+        Target targetTarget = null;
 
-        var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
-
-
-        if (_moveDiskActive && Input.GetMouseButtonUp(0))
+        if (Physics.Raycast(mouseRay, out var hitInfo))
         {
-            selectedShip.MoveTo(_moveDisk.HitPoint);
-            _moveDiskActive = false;
-            _moveDisk.Deactivate();
+            targetShip = hitInfo.transform.GetComponent<Ship>();
+            targetTarget = hitInfo.transform.GetComponent<Target>();
         }
 
+        // Simple action
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (targetShip != null)
+            {
+                SelectionManager.Instance.SelectShip(targetShip);
+                _moveDisk.Deactivate();
+            }
+            else if (_moveDisk.IsActive)
+            {
+                var selectedShip = selectionManager.GetSelectedShip();
+                selectedShip.MoveTo(_moveDisk.HitPoint);
+
+                _moveDisk.Deactivate();
+            }
+        }
+
+        // Compound action
         if ((Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(0)) && Camera.main != null
                                                                          && HasDebounceCompleted())
         {
@@ -51,24 +61,31 @@ public class Control : MonoBehaviour
         {
             _moveDisk.SetDiskMode(MoveDisk.DiskMode.Horizontal);
         }
-        
 
+        // Simple action
         if (Input.GetMouseButtonUp(1))
         {
-            // Checks that the movement plane for the ship is in view
-            if (movePlane.Raycast(mouseRay, out _))
+            var selectedShip = selectionManager.GetSelectedShip();
+            var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+
+            if (!_moveDisk.IsActive)
             {
-                if (!_moveDiskActive)
+                // Checks that the movement plane for the ship is in view. If the camera is below the plane of movement,
+                // the disk can't be show. Could be dealt with using advanced behaviours, but just keeping simple for moment
+                if (movePlane.Raycast(mouseRay, out _))
                 {
-                    _moveDiskActive = true;
                     _moveDisk.Activate(selectedShip.gameObject);
                 }
                 else
                 {
-                    _moveDiskActive = false;
-                    _moveDisk.Deactivate();
+                    Debug.LogWarning("Move plane not visible to camera. ");
                 }
             }
+            else
+            {
+                _moveDisk.Deactivate();
+            }
+            
         }
     }
 
