@@ -16,6 +16,20 @@ public class Ship : MonoBehaviour
 
     public bool Selected = false;
 
+    private GameObject _destinationCircle;
+    private GameObject _destinationLine;
+
+    private Vector3 DestinationVectorLocal => transform.position - _destination;
+    private float DestinationDistance => Vector3.Distance(transform.position, _destination);
+    private Vector3 TargetVectorLocal
+    {
+        get
+        {
+            if (Target == null) return Vector3.zero;
+            return transform.position - Target.transform.position;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +49,18 @@ public class Ship : MonoBehaviour
         gameObject.DrawCircle(Size / 2, 0.1f, Color.green);
         var line = GetComponent<LineRenderer>();
         line.enabled = false;
+
+        _destinationCircle = new GameObject();
+        _destinationCircle.transform.SetParent(this.transform);
+        _destinationCircle.DrawCircle(1, 0.1f, Color.green);
+        _destinationCircle.SetActive(false);
+        _destinationLine = new GameObject();
+        var lineRenderer = _destinationLine.AddComponent<LineRenderer>();
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.enabled = true;
+        lineRenderer.material.color = Color.green;
+        _destinationLine.SetActive(false);
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -70,6 +96,28 @@ public class Ship : MonoBehaviour
         //{
         //    turret.SetTarget(closestTarget);
         //}
+
+        //var distance = Vector3.Distance(_destination, transform.position);
+        if (Mathf.Abs(DestinationDistance) > 0.1f)
+        {
+            _destinationCircle.transform.position = _destination;
+
+            var moveDir = DestinationVectorLocal;
+            var circleEdge = Vector3.Normalize(new Vector3(moveDir.x, 0, moveDir.z)) * 1f;
+
+            var lineRenderer = _destinationLine.GetComponent<LineRenderer>();
+            var points = new[] { _destination + circleEdge, transform.position};
+            lineRenderer.SetPositions(points);
+            _destinationCircle.transform.rotation = Quaternion.identity;;
+
+            _destinationCircle.SetActive(true);
+            _destinationLine.SetActive(true);
+        }
+        else
+        {
+            _destinationCircle.SetActive(false);
+            _destinationLine.SetActive(false);
+        }
     }
 
     public bool IsTargetInRange(Target target = null)
@@ -91,7 +139,7 @@ public class Ship : MonoBehaviour
             //var meshColliders = GetComponentsInChildren<MeshCollider>();
 
             //if (!meshColliders.Any()) return 0;
-
+            
             //var bounds = new Bounds();
             //foreach (var meshCollider in meshColliders)
             //{
@@ -121,9 +169,9 @@ public class Ship : MonoBehaviour
     {
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
 
-        var distance = Vector3.Distance(_destination, transform.position);
+        //var distance = Vector3.Distance(_destination, transform.position);
 
-        var dirVector = transform.position - _destination;
+        var dirVector = DestinationVectorLocal;
 
         if (dirVector == Vector3.zero)
         {
@@ -136,7 +184,7 @@ public class Ship : MonoBehaviour
 
         var direction = Quaternion.LookRotation(dirVector, Vector3.up);
 
-        if (Mathf.Abs(distance) > 0.1f)
+        if (DestinationDistance > 0.1f)
         {
             // Lerp rotation
 
@@ -192,13 +240,6 @@ public class Ship : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        var distance = Vector3.Distance(_destination, transform.position);
-        if (Mathf.Abs(distance) > 0.1f)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(_destination, 1.0f);
-        }
-
         Gizmos.color = Color.blue;
         
         Gizmos.DrawWireSphere(transform.position, targetingRange);
