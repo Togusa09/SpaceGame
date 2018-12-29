@@ -4,10 +4,9 @@ public class Turret : MonoBehaviour
 {
     public Target Target;
     public float Speed = 2.0f;
+    public float Range = 5f;
 
     private Transform _barrelTransform;
-    public float _angle;
-    private float _dir = 2;
 
     public Shell ShellPrefab;
     
@@ -16,12 +15,14 @@ public class Turret : MonoBehaviour
         _barrelTransform = GetComponent<Transform>().Find("Turret/Barrel");
     }
 
+    public bool CanFire = false;
+
     // Update is called once per frame
     void Update()
     {
         var targetLocked = TrackTarget();
 
-        if (targetLocked)
+        if (targetLocked && CanFire)
         {
             var time = Time.time;
             if ((time - _lastFireTime) > _fireRate)
@@ -52,8 +53,6 @@ public class Turret : MonoBehaviour
     private float _targetDistance;
 
 
-
-    
 
     private bool TrackTarget()
     {
@@ -105,26 +104,6 @@ public class Turret : MonoBehaviour
         Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 2);
 
         Gizmos.color = originalColour;
-    }
-
-    private void UpDown()
-    {
-        var shift = Time.deltaTime * _dir;
-        _angle += shift;
-
-        if (_angle > 90)
-        {
-            _angle = 90;
-            _dir = -1.0f;
-        };
-
-        if (_angle < 0)
-        {
-            _angle = 0;
-            _dir = 1.0f;
-        };
-
-        _barrelTransform.localEulerAngles = new Vector3(0, -_angle, 0);
     }
 
     public void SetTarget(Target target)

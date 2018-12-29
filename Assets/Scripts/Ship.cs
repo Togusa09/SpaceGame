@@ -31,7 +31,8 @@ public class Ship : MonoBehaviour
 
         _engines = GetComponentsInChildren<Engine>();
 
-        gameObject.DrawCircle(2, 0.1f, Color.green);
+        Debug.Log(Size);
+        gameObject.DrawCircle(Size / 2, 0.1f, Color.green);
         var line = GetComponent<LineRenderer>();
         line.enabled = false;
     }
@@ -56,6 +57,12 @@ public class Ship : MonoBehaviour
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
         var targets = targetsInRange.Select(x => x.GetComponent<Target>()).Where(x => x != null).ToList();
 
+
+        foreach (var turret in _turrets)
+        {
+            turret.CanFire = IsTargetInRange();
+        }
+
         //var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
         //    .FirstOrDefault();
 
@@ -65,8 +72,45 @@ public class Ship : MonoBehaviour
         //}
     }
 
+    public bool IsTargetInRange(Target target = null)
+    {
+        if (target == null) target = Target;
+        if (target == null) return false;
+
+        var targetRange = Vector3.Distance(transform.position, target.transform.position);
+        return targetRange < targetingRange;
+    }
+
+    public float Size
+    {
+        get
+        {
+            return 6.0f;
+
+            // Sizes are coming out inconsistently, unsure why
+            //var meshColliders = GetComponentsInChildren<MeshCollider>();
+
+            //if (!meshColliders.Any()) return 0;
+
+            //var bounds = new Bounds();
+            //foreach (var meshCollider in meshColliders)
+            //{
+            //    bounds.Encapsulate(meshCollider.bounds);
+            //}
+
+            //var size = bounds.size;
+            //if (size.x > size.y)
+            //{
+            //    return size.x;
+            //}
+
+            //return size.y;
+        }
+    }
+
     public void SetTarget(Target target)
     {
+        Target = target;
         foreach (var turret in _turrets)
         {
             turret.SetTarget(target);
