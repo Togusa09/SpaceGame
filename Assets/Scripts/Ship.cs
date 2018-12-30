@@ -73,6 +73,8 @@ public class Ship : MonoBehaviour
     public float moveSpeed = 0.01f;
     public float targetingRange = 8.0f;
 
+    public int MaxHealth;
+    public int CurrentHealth;
 
     // Update is called once per frame
     void Update()
@@ -249,5 +251,16 @@ public class Ship : MonoBehaviour
     {
         Debug.Log("Moving to " + destination);
         _destination = destination;
+    }
+
+    public void StopAll()
+    {
+        StopMovement();
+        SetTarget(null);
+    }
+
+    public void StopMovement()
+    {
+        _destination = transform.position;
     }
 }

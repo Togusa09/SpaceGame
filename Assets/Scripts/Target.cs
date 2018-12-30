@@ -20,6 +20,5 @@ public class Target : MonoBehaviour
     {
         Debug.Log("Projectile hit");
         Destroy(collision.gameObject);
-
     }
 }

@@ -60,6 +60,8 @@ MonoBehaviour:
   turnSpeed: 10
   moveSpeed: 0.01
   targetingRange: 8
+  MaxHealth: 200
+  CurrentHealth: 100
 --- !u!54 &2840677492940825663
 Rigidbody:
   m_ObjectHideFlags: 0
