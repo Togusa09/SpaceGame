@@ -61,6 +61,8 @@ public class Ship : MonoBehaviour
         lineRenderer.enabled = true;
         lineRenderer.material.color = Color.green;
         _destinationLine.SetActive(false);
+
+        _shield = transform.Find("Shield").gameObject;
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -75,6 +77,10 @@ public class Ship : MonoBehaviour
 
     public int MaxHealth;
     public int CurrentHealth;
+    public int MaxShield;
+    public int CurrentShield;
+
+    private GameObject _shield;
 
     // Update is called once per frame
     void Update()
@@ -85,6 +91,14 @@ public class Ship : MonoBehaviour
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
         var targets = targetsInRange.Select(x => x.GetComponent<Target>()).Where(x => x != null).ToList();
 
+        if (CurrentShield <= 0)
+        {
+            _shield.SetActive(false);
+        }
+        else
+        {
+            _shield.SetActive(true);
+        }
 
         foreach (var turret in _turrets)
         {
