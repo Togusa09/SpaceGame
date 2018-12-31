@@ -11,6 +11,8 @@ ModelImporter:
     100010: Barrels
     100012: Turret
     100014: Turret_0
+    100016: Bone
+    100018: Bone_001
     400000: Cube
     400002: Cube_001
     400004: //RootNode
@@ -19,6 +21,8 @@ ModelImporter:
     400010: Barrels
     400012: Turret
     400014: Turret_0
+    400016: Bone
+    400018: Bone_001
     2100000: unnamed
     2300000: Cube
     2300002: Cube_001
@@ -38,6 +42,7 @@ ModelImporter:
     13700000: Barrels
     13700002: Turret
     13700004: Cube
+    13700006: Barrel
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
