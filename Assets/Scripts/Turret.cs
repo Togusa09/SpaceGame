@@ -12,7 +12,9 @@ public class Turret : MonoBehaviour
     
     void Start()
     {
-        _barrelTransform = GetComponent<Transform>().Find("Turret/Barrel");
+        //_barrelTransform = GetComponent<Transform>().Find("Turret/Barrel");
+        _barrelTransform = GetComponent<Transform>().Find("Turret/Armature/Turret/Barrel");
+
     }
 
     public bool CanFire = false;
@@ -69,21 +71,25 @@ public class Turret : MonoBehaviour
         // Rotate turret
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
         Quaternion rotation = Quaternion.LookRotation(turretDirection, transform.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
-       
+        //transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * Speed);
+
+        Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
+
         // Set barrel angle
         var barrelDirection = Vector3.ProjectOnPlane(relativePos, transform.right);
+        Debug.DrawRay(_barrelTransform.position, barrelDirection * 20, Color.yellow);
 
         var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
+        var quaternion = Quaternion.AngleAxis(aimAngle, -transform.forward);
+        
         if (aimAngle >= 0 && aimAngle <= 90)
         {
-            var barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up);
-            _barrelTransform.rotation = Quaternion.Lerp(_barrelTransform.rotation, barrelRotation, Time.deltaTime * Speed);
+            _barrelTransform.localRotation = Quaternion.Euler(0, 0, aimAngle);
         }
         else
         {
-            var barrelRotation = Quaternion.Euler(0, -90, 0);
-            _barrelTransform.localRotation = Quaternion.Lerp(_barrelTransform.localRotation, barrelRotation, Time.deltaTime * Speed);
+            _barrelTransform.localRotation = Quaternion.Euler(0, 0, 90);
         }
 
         return Vector3.Angle(_barrelCurrent, relativePos) < 10.0f;
@@ -100,8 +106,8 @@ public class Turret : MonoBehaviour
             Gizmos.DrawRay(_barrelTransform.position, _barrelCurrent.normalized * _targetDistance);
         }
         
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 2);
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 20);
 
         Gizmos.color = originalColour;
     }

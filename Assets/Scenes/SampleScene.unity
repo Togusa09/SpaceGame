@@ -465,7 +465,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -510,8 +510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a12c710171fc8d14c92e2aef68bfff5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 4
-  rotateSpeed: 1
+  panSpeed: 90
+  rotateSpeed: 4
 --- !u!1 &575886492
 GameObject:
   m_ObjectHideFlags: 0
@@ -1721,6 +1721,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship2
       objectReference: {fileID: 0}
+    - target: {fileID: 3121322964133822904, guid: ebaf95d9432b5194abe1d60385786316,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3121322964133822905, guid: ebaf95d9432b5194abe1d60385786316,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1809,7 +1814,7 @@ PrefabInstance:
     - target: {fileID: 3121322964133822905, guid: ebaf95d9432b5194abe1d60385786316,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -63
+      value: 86
       objectReference: {fileID: 0}
     - target: {fileID: 3121322964133822905, guid: ebaf95d9432b5194abe1d60385786316,
         type: 3}
@@ -1850,11 +1855,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3121322964133822906, guid: ebaf95d9432b5194abe1d60385786316,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebaf95d9432b5194abe1d60385786316, type: 3}

@@ -73,7 +73,7 @@ public class Control : MonoBehaviour
             var selectedShip = selectionManager.GetSelectedShip();
             
 
-            if (targetTarget != null)
+            if (targetTarget != null && selectedShip != null)
             {
                 if (targetTarget.IsHostile)
                 {
@@ -96,7 +96,7 @@ public class Control : MonoBehaviour
                 }
                 
             }
-            else if (!_moveDisk.IsActive)
+            else if (!_moveDisk.IsActive && selectedShip != null)
             {
                 var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
 

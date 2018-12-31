@@ -152,7 +152,7 @@ MonoBehaviour:
   Selected: 0
   turnSpeed: 10
   moveSpeed: 0.5
-  targetingRange: 8
+  targetingRange: 300
   MaxHealth: 200
   CurrentHealth: 100
   MaxShield: 0
