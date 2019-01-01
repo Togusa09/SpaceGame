@@ -5,15 +5,23 @@ public class Control : MonoBehaviour
 {
     public Color UiColor = Color.green;
 
+    private bool _attackOverride;
+    private SelectionManager _selectionManager;
+
     void Start()
     {
         var moveDiskGameObject = new GameObject("MoveDisk");
         _moveDisk = moveDiskGameObject.AddComponent<MoveDisk>();
         _moveDisk.enabled = true;
+
+        _selectionManager = SelectionManager.Instance;
     }
 
     private MoveDisk _moveDisk;
     private Ray? TargetRay;
+
+    public Texture2D NormalCursor;
+    public Texture2D AttackCursor;
 
     void Update()
     {
@@ -24,7 +32,6 @@ public class Control : MonoBehaviour
 
         //TargetRay = null;
 
-        var selectionManager = SelectionManager.Instance;
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         
         // Find out if mouse is current over a ship
@@ -37,19 +44,33 @@ public class Control : MonoBehaviour
             targetTarget = hitInfo.transform.GetComponent<Target>();
         }
 
+        if (targetTarget?.IsHostile == true || _attackOverride)
+        {
+            Cursor.SetCursor(AttackCursor, Vector2.zero, CursorMode.Auto);
+        }
+        else
+        {
+            Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.Auto);
+        }
+
+        if (_attackOverride && targetTarget != null)
+        {
+            AttackTarget(targetTarget);
+            _attackOverride = false;
+            return;
+        }
+
         // Simple action
         if (Input.GetMouseButtonUp(0))
         {
-            
-
             if (targetShip != null)
             {
-                SelectionManager.Instance.SelectShip(targetShip);
+                _selectionManager.SelectShip(targetShip);
                 _moveDisk.Deactivate();
             }
             else if (_moveDisk.IsActive)
             {
-                var selectedShip = selectionManager.GetSelectedShip();
+                var selectedShip = _selectionManager.GetSelectedShip();
                 selectedShip.MoveTo(_moveDisk.HitPoint);
 
                 _moveDisk.Deactivate();
@@ -67,25 +88,22 @@ public class Control : MonoBehaviour
             _moveDisk.SetDiskMode(MoveDisk.DiskMode.Horizontal);
         }
 
-        // Simple action
-        if (Input.GetMouseButtonUp(1))
+        if (Input.GetMouseButtonUp(1) && _attackOverride)
         {
-            var selectedShip = selectionManager.GetSelectedShip();
             
+            AttackTarget(targetTarget);
+            _attackOverride = false;
+        }
 
+        // Simple action
+        if (Input.GetMouseButtonUp(1) && !_attackOverride)
+        {
+            var selectedShip = _selectionManager.GetSelectedShip();
             if (targetTarget != null && selectedShip != null)
             {
                 if (targetTarget.IsHostile)
                 {
-                    selectedShip.SetTarget(targetTarget);
-                    var targetInRange = selectedShip.IsTargetInRange(targetTarget);
-                    if (!targetInRange)
-                    {
-                        var dir = selectedShip.transform.position - targetTarget.transform.position;
-                        TargetRay = new Ray(targetTarget.transform.position, dir);
-                        var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 20);
-                        selectedShip.MoveTo(destination);
-                    }
+                    AttackTarget(targetTarget);
                 }
                 else
                 {
@@ -108,14 +126,28 @@ public class Control : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Move plane not visible to camera. ");
+                    Debug.LogWarning("Move plane not visible to camera.");
                 }
             }
             else
             {
                 _moveDisk.Deactivate();
             }
-            
+        }
+    }
+
+    private void AttackTarget(Target targetTarget)
+    {
+        var selectedShip = _selectionManager.GetSelectedShip();
+
+        selectedShip.SetTarget(targetTarget);
+        var targetInRange = selectedShip.IsTargetInRange(targetTarget);
+        if (!targetInRange)
+        {
+            var dir = selectedShip.transform.position - targetTarget.transform.position;
+            TargetRay = new Ray(targetTarget.transform.position, dir);
+            var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 20);
+            selectedShip.MoveTo(destination);
         }
     }
 
@@ -137,5 +169,10 @@ public class Control : MonoBehaviour
         {
             Gizmos.DrawRay(TargetRay.Value);
         }
+    }
+
+    public void StartAttackSelection()
+    {
+        _attackOverride = true;
     }
 }
