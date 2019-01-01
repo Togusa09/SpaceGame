@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Control : MonoBehaviour
 {
-    public Color UiColor = Color.green;
-
     private bool _attackOverride;
     private SelectionManager _selectionManager;
 
@@ -17,11 +15,38 @@ public class Control : MonoBehaviour
         _selectionManager = SelectionManager.Instance;
     }
 
+    public MoveDisk GetMoveDisk()
+    {
+        return _moveDisk;
+    }
+
     private MoveDisk _moveDisk;
     private Ray? TargetRay;
 
     public Texture2D NormalCursor;
     public Texture2D AttackCursor;
+
+    private Ship _targetShip;
+    private Target _targetTarget;
+    private Camera _camera;
+
+    private void RaycastTarget()
+    {
+        _camera = Camera.main;
+
+        // Find out if mouse is current over a ship
+        _targetShip = null;
+        _targetTarget = null;
+
+        var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(mouseRay, out var hitInfo))
+        {
+            _targetShip = hitInfo.transform.GetComponent<Ship>();
+            _targetTarget = hitInfo.transform.GetComponent<Target>();
+        }
+    }
+
 
     void Update()
     {
@@ -30,110 +55,114 @@ public class Control : MonoBehaviour
             StartDebounce();
         }
 
-        //TargetRay = null;
+        // scenarios: Selecting ship, target, start movedisk, end movedisk, move disk vertical
 
-        var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
-        // Find out if mouse is current over a ship
-        Ship targetShip = null;
-        Target targetTarget = null;
-
-        if (Physics.Raycast(mouseRay, out var hitInfo))
-        {
-            targetShip = hitInfo.transform.GetComponent<Ship>();
-            targetTarget = hitInfo.transform.GetComponent<Target>();
-        }
-
-        if (targetTarget?.IsHostile == true || _attackOverride)
-        {
-            Cursor.SetCursor(AttackCursor, Vector2.zero, CursorMode.Auto);
-        }
-        else
-        {
-            Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.Auto);
-        }
-
-        if (_attackOverride && targetTarget != null)
-        {
-            AttackTarget(targetTarget);
-            _attackOverride = false;
-            return;
-        }
-
-        // Simple action
+        RaycastTarget();
         if (Input.GetMouseButtonUp(0))
         {
-            if (targetShip != null)
+            if (_targetShip != null)
             {
-                _selectionManager.SelectShip(targetShip);
-                _moveDisk.Deactivate();
-            }
-            else if (_moveDisk.IsActive)
-            {
-                var selectedShip = _selectionManager.GetSelectedShip();
-                selectedShip.MoveTo(_moveDisk.HitPoint);
-
-                _moveDisk.Deactivate();
+                _selectionManager.SelectShip(_targetShip);
             }
         }
 
-        // Compound action
-        if ((Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(0)) && Camera.main != null
-                                                                         && HasDebounceCompleted())
-        {
-            _moveDisk.SetDiskMode(MoveDisk.DiskMode.Vertical);
-        }
-        else
-        {
-            _moveDisk.SetDiskMode(MoveDisk.DiskMode.Horizontal);
-        }
+        // If clicked on something: - Combine here, as want to combine ship and target eventually
+            //if (_targetShip != null || _targetTarget != null)
+            //{
 
-        if (Input.GetMouseButtonUp(1) && _attackOverride)
-        {
-            
-            AttackTarget(targetTarget);
-            _attackOverride = false;
-        }
+            //}
 
-        // Simple action
-        if (Input.GetMouseButtonUp(1) && !_attackOverride)
-        {
-            var selectedShip = _selectionManager.GetSelectedShip();
-            if (targetTarget != null && selectedShip != null)
-            {
-                if (targetTarget.IsHostile)
-                {
-                    AttackTarget(targetTarget);
-                }
-                else
-                {
-                    var dir = selectedShip.transform.position - targetTarget.transform.position;
-                    TargetRay = new Ray(targetTarget.transform.position, dir);
-                    var destination = TargetRay.Value.GetPoint((selectedShip.Size / 2) );
-                    selectedShip.MoveTo(destination);
-                }
-                
-            }
-            else if (!_moveDisk.IsActive && selectedShip != null)
-            {
-                var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+            //if (_targetTarget?.IsHostile == true || _attackOverride)
+            //{
+            //    Cursor.SetCursor(AttackCursor, Vector2.zero, CursorMode.Auto);
+            //}
+            //else
+            //{
+            //    Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.Auto);
+            //}
 
-                // Checks that the movement plane for the ship is in view. If the camera is below the plane of movement,
-                // the disk can't be show. Could be dealt with using advanced behaviours, but just keeping simple for moment
-                if (movePlane.Raycast(mouseRay, out _))
-                {
-                    _moveDisk.Activate(selectedShip.gameObject);
-                }
-                else
-                {
-                    Debug.LogWarning("Move plane not visible to camera.");
-                }
-            }
-            else
-            {
-                _moveDisk.Deactivate();
-            }
-        }
+            //if (_attackOverride && _targetTarget != null)
+            //{
+            //    AttackTarget(_targetTarget);
+            //    _attackOverride = false;
+            //    return;
+            //}
+
+            //// Simple action
+            //if (Input.GetMouseButtonUp(0))
+            //{
+            //    if (_targetShip != null)
+            //    {
+            //        _selectionManager.SelectShip(_targetShip);
+            //        _moveDisk.Deactivate();
+            //    }
+            //    else if (_moveDisk.IsActive)
+            //    {
+            //        var selectedShip = _selectionManager.GetSelectedShip();
+            //        selectedShip.MoveTo(_moveDisk.HitPoint);
+
+            //        _moveDisk.Deactivate();
+            //    }
+            //}
+
+            //// Compound action
+            //if ((Input.GetKey(KeyCode.LeftShift) || Input.GetMouseButton(0)) && Camera.main != null
+            //                                                                 && HasDebounceCompleted())
+            //{
+            //    _moveDisk.SetDiskMode(MoveDisk.DiskMode.Vertical);
+            //}
+            //else
+            //{
+            //    _moveDisk.SetDiskMode(MoveDisk.DiskMode.Horizontal);
+            //}
+
+            //if (Input.GetMouseButtonUp(1) && _attackOverride)
+            //{
+
+            //    AttackTarget(_targetTarget);
+            //    _attackOverride = false;
+            //}
+
+            //// Simple action
+            //if (Input.GetMouseButtonUp(1) && !_attackOverride)
+            //{
+            //    var selectedShip = _selectionManager.GetSelectedShip();
+            //    if (_targetTarget != null && selectedShip != null)
+            //    {
+            //        if (_targetTarget.IsHostile)
+            //        {
+            //            AttackTarget(_targetTarget);
+            //        }
+            //        else
+            //        {
+            //            var dir = selectedShip.transform.position - _targetTarget.transform.position;
+            //            TargetRay = new Ray(_targetTarget.transform.position, dir);
+            //            var destination = TargetRay.Value.GetPoint((selectedShip.Size / 2));
+            //            selectedShip.MoveTo(destination);
+            //        }
+
+            //    }
+            //    else if (!_moveDisk.IsActive && selectedShip != null)
+            //    {
+            //        var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
+
+            //        var mouseRay = _camera.ScreenPointToRay(Input.mousePosition);
+            //        // Checks that the movement plane for the ship is in view. If the camera is below the plane of movement,
+            //        // the disk can't be show. Could be dealt with using advanced behaviours, but just keeping simple for moment
+            //        if (movePlane.Raycast(mouseRay, out _))
+            //        {
+            //            _moveDisk.Activate(selectedShip.gameObject);
+            //        }
+            //        else
+            //        {
+            //            Debug.LogWarning("Move plane not visible to camera.");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        _moveDisk.Deactivate();
+            //    }
+            //}
     }
 
     private void AttackTarget(Target targetTarget)
