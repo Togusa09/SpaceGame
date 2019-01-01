@@ -12,7 +12,6 @@ public class Turret : MonoBehaviour
     
     void Start()
     {
-        //_barrelTransform = GetComponent<Transform>().Find("Turret/Barrel");
         _barrelTransform = GetComponent<Transform>().Find("Turret/Armature/Turret/Barrel");
 
     }
@@ -58,12 +57,9 @@ public class Turret : MonoBehaviour
 
         Vector3 relativePos = Target.transform.position - transform.position;
 
-        //var turretPlane = new Plane(transform.up, transform.position);
-
         // Rotate turret
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
         Quaternion rotation = Quaternion.LookRotation(turretDirection, transform.up);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * Speed);
 
         Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
@@ -73,7 +69,6 @@ public class Turret : MonoBehaviour
         Debug.DrawRay(_barrelTransform.position, barrelDirection * 20, Color.yellow);
 
         var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
-        //var quaternion = Quaternion.AngleAxis(aimAngle, -transform.forward);
         
         if (aimAngle >= 0 && aimAngle <= 90)
         {
@@ -87,13 +82,9 @@ public class Turret : MonoBehaviour
         Debug.DrawRay(_barrelTransform.position, _barrelTransform.rotation * -Vector3.right * 30, Color.cyan);
         Debug.DrawRay(_barrelTransform.position, relativePos.normalized * 30, Color.magenta);
 
-        //var targetAngle = Quaternion.Angle(_barrelTransform.rotation, Quaternion.LookRotation(relativePos));
         var targetAngle = Vector3.Angle(_barrelTransform.rotation * -Vector3.right, relativePos);
         return targetAngle < 10.0f;
-        //return Vector3.Angle(transform.up, barrelDirection) < 10.0f;
     }
-
-
 
     public void SetTarget(Target target)
     {

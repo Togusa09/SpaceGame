@@ -18,7 +18,7 @@ public class Shell : MonoBehaviour
 
     IEnumerator LimitLifespan()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(60);
         Destroy(gameObject);
     }
 }
