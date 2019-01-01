@@ -12,7 +12,8 @@ public class Turret : MonoBehaviour
     
     void Start()
     {
-        _barrelTransform = GetComponent<Transform>().Find("Turret/Barrel");
+        _barrelTransform = GetComponent<Transform>().Find("Turret/Armature/Turret/Barrel");
+
     }
 
     public bool CanFire = false;
@@ -35,75 +36,54 @@ public class Turret : MonoBehaviour
 
     private float _lastFireTime;
     private float _fireRate = 1f;
-    private float _shellVelocity = 1f;
+    private float _shellVelocity = 20f;
 
     private void FireCannon()
     {
-        var shell = Instantiate(ShellPrefab, _barrelTransform.position, _barrelTransform.rotation);
+        var shell = Instantiate(ShellPrefab, _barrelTransform.position, _barrelTransform.rotation * Quaternion.LookRotation(Vector3.left));
         var rigidBody = shell.GetComponent<Rigidbody>();
-        rigidBody.velocity = _barrelTransform.transform.forward * _shellVelocity;
+        rigidBody.velocity = -_barrelTransform.transform.right * _shellVelocity;
     }
 
-    private Vector3 _turretCurrent;
     private Vector3 _turretTarget;
 
-    private Vector3 _barrelCurrent;
     private Vector3 _barrelTarget;
-
-    private float _targetDistance;
 
 
 
     private bool TrackTarget()
     {
-        _turretCurrent = transform.forward;
-        _barrelCurrent = _barrelTransform.forward;
-
         if (Target == null) return false;
 
         Vector3 relativePos = Target.transform.position - transform.position;
-        _targetDistance = relativePos.magnitude;
-
-        //var turretPlane = new Plane(transform.up, transform.position);
 
         // Rotate turret
         var turretDirection = Vector3.ProjectOnPlane(relativePos, transform.up);
         Quaternion rotation = Quaternion.LookRotation(turretDirection, transform.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * Speed);
-       
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * Speed);
+
+        Debug.DrawRay(transform.position, transform.forward * 20, Color.blue);
+
         // Set barrel angle
         var barrelDirection = Vector3.ProjectOnPlane(relativePos, transform.right);
+        Debug.DrawRay(_barrelTransform.position, barrelDirection * 20, Color.yellow);
 
         var aimAngle = Vector3.SignedAngle(transform.up, barrelDirection, transform.right);
+        
         if (aimAngle >= 0 && aimAngle <= 90)
         {
-            var barrelRotation = Quaternion.LookRotation(barrelDirection, _barrelTransform.up);
-            _barrelTransform.rotation = Quaternion.Lerp(_barrelTransform.rotation, barrelRotation, Time.deltaTime * Speed);
+            _barrelTransform.localRotation = Quaternion.Euler(0, 0, aimAngle);
         }
         else
         {
-            var barrelRotation = Quaternion.Euler(0, -90, 0);
-            _barrelTransform.localRotation = Quaternion.Lerp(_barrelTransform.localRotation, barrelRotation, Time.deltaTime * Speed);
+            _barrelTransform.localRotation = Quaternion.Euler(0, 0, 90);
         }
 
-        return Vector3.Angle(_barrelCurrent, relativePos) < 10.0f;
-    }
+        Debug.DrawRay(_barrelTransform.position, _barrelTransform.rotation * -Vector3.right * 30, Color.cyan);
+        Debug.DrawRay(_barrelTransform.position, relativePos.normalized * 30, Color.magenta);
 
-    private void OnDrawGizmos()
-    {
-        var originalColour = Gizmos.color;
-
-        Gizmos.color = Color.green;
-
-        if (_barrelTransform != null)
-        {
-            Gizmos.DrawRay(_barrelTransform.position, _barrelCurrent.normalized * _targetDistance);
-        }
-        
-        Gizmos.color = Color.blue;
-        Gizmos.DrawRay(transform.position, _turretCurrent.normalized * 2);
-
-        Gizmos.color = originalColour;
+        var targetAngle = Vector3.Angle(_barrelTransform.rotation * -Vector3.right, relativePos);
+        return targetAngle < 10.0f;
     }
 
     public void SetTarget(Target target)

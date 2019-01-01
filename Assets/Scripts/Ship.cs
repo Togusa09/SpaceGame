@@ -46,18 +46,19 @@ public class Ship : MonoBehaviour
         _engines = GetComponentsInChildren<Engine>();
 
         Debug.Log(Size);
-        gameObject.DrawCircle(Size / 2, 0.1f, Color.green);
+        gameObject.DrawCircle(Size / 2, 1f, Color.green);
         var line = GetComponent<LineRenderer>();
         line.enabled = false;
 
-        _destinationCircle = new GameObject();
+        _destinationCircle = new GameObject("DestinationCircle");
         _destinationCircle.transform.SetParent(this.transform);
-        _destinationCircle.DrawCircle(1, 0.1f, Color.green);
+        _destinationCircle.DrawCircle(10, 1f, Color.green);
         _destinationCircle.SetActive(false);
-        _destinationLine = new GameObject();
+        _destinationLine = new GameObject("DestinationLine");
+        _destinationLine.transform.SetParent(this.transform);
         var lineRenderer = _destinationLine.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 1f;
+        lineRenderer.endWidth = 1f;
         lineRenderer.enabled = true;
         lineRenderer.material.color = Color.green;
         _destinationLine.SetActive(false);
@@ -73,7 +74,7 @@ public class Ship : MonoBehaviour
 
     public float turnSpeed = 10.0f;
     public float moveSpeed = 0.01f;
-    public float targetingRange = 8.0f;
+    public float targetingRange = 80.0f;
 
     public int MaxHealth;
     public int CurrentHealth;
@@ -114,12 +115,12 @@ public class Ship : MonoBehaviour
         //}
 
         //var distance = Vector3.Distance(_destination, transform.position);
-        if (Mathf.Abs(DestinationDistance) > 0.1f)
+        if (Mathf.Abs(DestinationDistance) > 1f)
         {
             _destinationCircle.transform.position = _destination;
 
             var moveDir = DestinationVectorLocal;
-            var circleEdge = Vector3.Normalize(new Vector3(moveDir.x, 0, moveDir.z)) * 1f;
+            var circleEdge = Vector3.Normalize(new Vector3(moveDir.x, 0, moveDir.z)) * 10f;
 
             var lineRenderer = _destinationLine.GetComponent<LineRenderer>();
             var points = new[] { _destination + circleEdge, transform.position};
@@ -149,7 +150,7 @@ public class Ship : MonoBehaviour
     {
         get
         {
-            return 6.0f;
+            return 200.0f;
 
             // Sizes are coming out inconsistently, unsure why
             //var meshColliders = GetComponentsInChildren<MeshCollider>();

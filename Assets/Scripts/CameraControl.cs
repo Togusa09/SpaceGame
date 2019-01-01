@@ -2,7 +2,7 @@
 
 public class CameraControl : MonoBehaviour
 {
-    public float panSpeed = 1.0f;
+    public float panSpeed = 10.0f;
     public float rotateSpeed = 1.0f;
 
     // Start is called before the first frame update
@@ -41,10 +41,8 @@ public class CameraControl : MonoBehaviour
 
         panMovement = Quaternion.AngleAxis(angle, Vector3.up) * panMovement;
 
-        var verticalScroll = Input.mouseScrollDelta.y;
+        var verticalScroll = Input.mouseScrollDelta.y * 3;
         panMovement += Vector3.up * verticalScroll;
-        
-
 
         transform.Translate(panMovement, Space.World);
 

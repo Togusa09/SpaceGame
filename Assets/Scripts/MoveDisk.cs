@@ -8,18 +8,18 @@ public class MoveDisk : MonoBehaviour
     void Start()
     {
         _planeCursorTop = new GameObject("PlaneCursor");
-        _planeCursorTop.DrawCircle(1, 0.1f, UiColor);
+        _planeCursorTop.DrawCircle(10, 1f, UiColor);
         _planeCursorTop.transform.SetParent(transform);
 
         _planeCursorBottom = new GameObject("PlaneCursor");
-        _planeCursorBottom.DrawCircle(1, 0.1f, UiColor);
+        _planeCursorBottom.DrawCircle(10, 1f, UiColor);
         _planeCursorBottom.transform.SetParent(transform);
 
         _verticalConnectingLine = new GameObject("ConnectingLine");
         _verticalConnectingLine.transform.SetParent(transform);
         var lineRenderer = _verticalConnectingLine.AddComponent<LineRenderer>();
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 1f;
+        lineRenderer.endWidth = 1f;
         lineRenderer.enabled = true;
         lineRenderer.material.color = UiColor;
 
@@ -97,7 +97,7 @@ public class MoveDisk : MonoBehaviour
                 transform.parent = _anchorObject.transform;
                 transform.rotation = Quaternion.AngleAxis(0, Vector3.forward);
                 transform.localPosition = Vector3.zero;
-                gameObject.DrawCircle(distance, 0.1f, UiColor);
+                gameObject.DrawCircle(distance, 1f, UiColor);
             }
         }
 

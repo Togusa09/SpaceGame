@@ -73,7 +73,7 @@ public class Control : MonoBehaviour
             var selectedShip = selectionManager.GetSelectedShip();
             
 
-            if (targetTarget != null)
+            if (targetTarget != null && selectedShip != null)
             {
                 if (targetTarget.IsHostile)
                 {
@@ -83,7 +83,7 @@ public class Control : MonoBehaviour
                     {
                         var dir = selectedShip.transform.position - targetTarget.transform.position;
                         TargetRay = new Ray(targetTarget.transform.position, dir);
-                        var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 2);
+                        var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 20);
                         selectedShip.MoveTo(destination);
                     }
                 }
@@ -91,12 +91,12 @@ public class Control : MonoBehaviour
                 {
                     var dir = selectedShip.transform.position - targetTarget.transform.position;
                     TargetRay = new Ray(targetTarget.transform.position, dir);
-                    var destination = TargetRay.Value.GetPoint(selectedShip.Size - 2);
+                    var destination = TargetRay.Value.GetPoint((selectedShip.Size / 2) );
                     selectedShip.MoveTo(destination);
                 }
                 
             }
-            else if (!_moveDisk.IsActive)
+            else if (!_moveDisk.IsActive && selectedShip != null)
             {
                 var movePlane = new Plane(Vector3.up, selectedShip.transform.position);
 
