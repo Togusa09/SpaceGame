@@ -1,10 +1,14 @@
 ﻿using Assets.Scripts;
+using Assets.Scripts.UI;
 using UnityEngine;
 
 public class Control : MonoBehaviour
 {
     private bool _attackOverride;
     private SelectionManager _selectionManager;
+
+    [HideInInspector]
+    public MovementInformation MovementInformation { get; } = new MovementInformation();
 
     void Start()
     {
@@ -14,6 +18,8 @@ public class Control : MonoBehaviour
 
         _selectionManager = SelectionManager.Instance;
     }
+
+    public ClickHitState ClickHitState;
 
     public MoveDisk GetMoveDisk()
     {
@@ -26,8 +32,8 @@ public class Control : MonoBehaviour
     public Texture2D NormalCursor;
     public Texture2D AttackCursor;
 
-    private Ship _targetShip;
-    private Target _targetTarget;
+    //private Ship _targetShip;
+    //private Target _targetTarget;
     private Camera _camera;
 
     private void RaycastTarget()
@@ -35,15 +41,21 @@ public class Control : MonoBehaviour
         _camera = Camera.main;
 
         // Find out if mouse is current over a ship
-        _targetShip = null;
-        _targetTarget = null;
+        //_targetShip = null;
+        //_targetTarget = null;
+
+        ClickHitState.Target = null;
+        ClickHitState.Ship = null;
 
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(mouseRay, out var hitInfo))
         {
-            _targetShip = hitInfo.transform.GetComponent<Ship>();
-            _targetTarget = hitInfo.transform.GetComponent<Target>();
+            ClickHitState.Target = hitInfo.transform.GetComponent<Target>();
+            ClickHitState.Ship = hitInfo.transform.GetComponent<Ship>();;
+
+            //_targetShip = hitInfo.transform.GetComponent<Ship>();
+            //_targetTarget = hitInfo.transform.GetComponent<Target>();
         }
     }
 
@@ -60,9 +72,9 @@ public class Control : MonoBehaviour
         RaycastTarget();
         if (Input.GetMouseButtonUp(0))
         {
-            if (_targetShip != null)
+            if (ClickHitState.Ship != null)
             {
-                _selectionManager.SelectShip(_targetShip);
+                _selectionManager.SelectShip(ClickHitState.Ship);
             }
         }
 

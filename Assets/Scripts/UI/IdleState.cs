@@ -10,14 +10,30 @@ public class IdleState : StateMachineBehaviour
     //    
     //}
 
-    public bool ShowDisk;
-
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        var control = animator.GetComponent<Control>();
+
         if (Input.GetMouseButtonUp(1))
         {
-            animator.SetBool("ShowDisk", true);
+            // Check if mouse is over something
+
+            if (control.ClickHitState.Ship != null)
+            {
+                // Clicked on ship
+                animator.SetBool("Moving", true);
+                control.MovementInformation.SetDestination(control.ClickHitState.Ship);
+            }
+            else if (control.ClickHitState.Target != null)
+            {
+                animator.SetBool("Moving", true);
+                control.MovementInformation.SetDestination(control.ClickHitState.Target);
+            }
+            else
+            {
+                animator.SetBool("ShowDisk", true);
+            }
         }
     }
 
