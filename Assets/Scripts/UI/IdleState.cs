@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.UI;
+﻿using Assets.Scripts;
+using Assets.Scripts.UI;
 using UnityEngine;
 
 public class IdleState : StateMachineBehaviour
@@ -23,10 +24,24 @@ public class IdleState : StateMachineBehaviour
             control.ShowDefaultCursor();
         }
 
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (control.AttackOverride)
+            {
+                animator.SetBool(UIAnimationControlParameters.Attacking, true);
+            }
+            else
+            {
+                if (control.ClickHitState.Ship != null)
+                {
+                    SelectionManager.Instance.SelectShip(control.ClickHitState.Ship);
+                }
+            }
+        }
+
         if (Input.GetMouseButtonUp(1))
         {
             // Check if mouse is over something
-
             if (control.ClickHitState.Ship != null)
             {
                 // Clicked on ship
@@ -44,7 +59,6 @@ public class IdleState : StateMachineBehaviour
                     animator.SetBool(UIAnimationControlParameters.Moving, true);
                 }
 
-                
                 control.MovementInformation.SetDestination(control.ClickHitState.Target);
             }
             else

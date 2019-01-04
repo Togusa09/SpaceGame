@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts;
+﻿using Assets.Scripts;
 using Assets.Scripts.UI;
 using UnityEngine;
 
@@ -16,10 +14,10 @@ public class AttackState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         var control = animator.GetComponent<Control>();
-        var movement = control.MovementInformation;
+        var clickState = control.ClickHitState;
         var selectedShip = SelectionManager.Instance.GetSelectedShip();
 
-        selectedShip.Attack(movement.Target);
+        selectedShip.Attack(clickState.Target);
 
         animator.SetBool(UIAnimationControlParameters.Attacking, false);
     }

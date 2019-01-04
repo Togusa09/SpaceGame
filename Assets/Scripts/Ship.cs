@@ -106,15 +106,6 @@ public class Ship : MonoBehaviour
             turret.CanFire = IsTargetInRange();
         }
 
-        //var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
-        //    .FirstOrDefault();
-
-        //foreach (var turret in _turrets)
-        //{
-        //    turret.SetTarget(closestTarget);
-        //}
-
-        //var distance = Vector3.Distance(_destination, transform.position);
         if (Mathf.Abs(DestinationDistance) > 1f)
         {
             _destinationCircle.transform.position = _destination;
@@ -185,8 +176,6 @@ public class Ship : MonoBehaviour
     private void ProcessMovement()
     {
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
-
-        //var distance = Vector3.Distance(_destination, transform.position);
 
         var dirVector = DestinationVectorLocal;
 
