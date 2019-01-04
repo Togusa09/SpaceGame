@@ -106,15 +106,6 @@ public class Ship : MonoBehaviour
             turret.CanFire = IsTargetInRange();
         }
 
-        //var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
-        //    .FirstOrDefault();
-
-        //foreach (var turret in _turrets)
-        //{
-        //    turret.SetTarget(closestTarget);
-        //}
-
-        //var distance = Vector3.Distance(_destination, transform.position);
         if (Mathf.Abs(DestinationDistance) > 1f)
         {
             _destinationCircle.transform.position = _destination;
@@ -185,8 +176,6 @@ public class Ship : MonoBehaviour
     private void ProcessMovement()
     {
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
-
-        //var distance = Vector3.Distance(_destination, transform.position);
 
         var dirVector = DestinationVectorLocal;
 
@@ -262,10 +251,43 @@ public class Ship : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 
+    public void Attack(Target target)
+    {
+        SetTarget(target);
+        if (!IsTargetInRange(target))
+        {
+            ApproachToWeaponsRange(target.transform.position);
+        }
+    }
+
     public void MoveTo(Vector3 destination)
     {
         Debug.Log("Moving to " + destination);
         _destination = destination;
+    }
+
+    public void ApproachTarget(Target target)
+    {
+        ApproachToDistance(target.transform.position, 40.0f + Size/2);
+    }
+
+    public void ApproachTarget(Ship ship)
+    {
+        ApproachToDistance(ship.transform.position, ship.Size);
+    }
+
+    public void ApproachToWeaponsRange(Vector3 position)
+    {
+        ApproachToDistance(position, targetingRange - 20);
+    }
+
+    public void ApproachToDistance(Vector3 position, float distance)
+    {
+        var dir = transform.position - position;
+        var target = new Ray(position, dir);
+        Debug.DrawRay(position, dir, Color.blue, 6);
+        var destination = target.GetPoint(distance);
+        MoveTo(destination);
     }
 
     public void StopAll()
