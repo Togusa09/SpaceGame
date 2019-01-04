@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Control : MonoBehaviour
 {
-    public bool AttackOverride { get; private set; }
+    public bool AttackOverride;
 
     [HideInInspector]
     public MovementInformation MovementInformation { get; } = new MovementInformation();

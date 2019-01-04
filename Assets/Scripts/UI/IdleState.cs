@@ -15,7 +15,9 @@ public class IdleState : StateMachineBehaviour
     {
         var control = animator.GetComponent<Control>();
 
-        if (control.ClickHitState.Target != null && control.ClickHitState.Target.IsHostile)
+ 
+
+        if ((control.ClickHitState.Target != null && control.ClickHitState.Target.IsHostile) || control.AttackOverride)
         {
             control.ShowAttackCursor();
         }
@@ -26,7 +28,8 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (control.AttackOverride)
+            if (control.AttackOverride &&
+                     (control.ClickHitState.Target != null && control.ClickHitState.Ship != null))
             {
                 animator.SetBool(UIAnimationControlParameters.Attacking, true);
             }
