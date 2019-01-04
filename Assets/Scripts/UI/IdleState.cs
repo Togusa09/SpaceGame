@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.UI;
 using UnityEngine;
 
 public class IdleState : StateMachineBehaviour
@@ -15,6 +14,15 @@ public class IdleState : StateMachineBehaviour
     {
         var control = animator.GetComponent<Control>();
 
+        if (control.ClickHitState.Target != null && control.ClickHitState.Target.IsHostile)
+        {
+            control.ShowAttackCursor();
+        }
+        else
+        {
+            control.ShowDefaultCursor();
+        }
+
         if (Input.GetMouseButtonUp(1))
         {
             // Check if mouse is over something
@@ -22,17 +30,26 @@ public class IdleState : StateMachineBehaviour
             if (control.ClickHitState.Ship != null)
             {
                 // Clicked on ship
-                animator.SetBool("Moving", true);
+                animator.SetBool(UIAnimationControlParameters.Moving, true);
                 control.MovementInformation.SetDestination(control.ClickHitState.Ship);
             }
             else if (control.ClickHitState.Target != null)
             {
-                animator.SetBool("Moving", true);
+                if (control.ClickHitState.Target.IsHostile)
+                {
+                    animator.SetBool(UIAnimationControlParameters.Attacking, true);
+                }
+                else
+                {
+                    animator.SetBool(UIAnimationControlParameters.Moving, true);
+                }
+
+                
                 control.MovementInformation.SetDestination(control.ClickHitState.Target);
             }
             else
             {
-                animator.SetBool("ShowDisk", true);
+                animator.SetBool(UIAnimationControlParameters.ShowDisk, true);
             }
         }
     }

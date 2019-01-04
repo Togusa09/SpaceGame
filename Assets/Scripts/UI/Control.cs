@@ -59,13 +59,23 @@ public class Control : MonoBehaviour
         }
     }
 
+    public void ShowAttackCursor()
+    {
+        Cursor.SetCursor(AttackCursor, Vector2.zero, CursorMode.Auto);
+    }
+
+    public void ShowDefaultCursor()
+    {
+        Cursor.SetCursor(NormalCursor, Vector2.zero, CursorMode.Auto);
+    }
+
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartDebounce();
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    StartDebounce();
+        //}
 
         // scenarios: Selecting ship, target, start movedisk, end movedisk, move disk vertical
 
@@ -177,32 +187,32 @@ public class Control : MonoBehaviour
             //}
     }
 
-    private void AttackTarget(Target targetTarget)
-    {
-        var selectedShip = _selectionManager.GetSelectedShip();
+    //private void AttackTarget(Target targetTarget)
+    //{
+    //    var selectedShip = _selectionManager.GetSelectedShip();
 
-        selectedShip.SetTarget(targetTarget);
-        var targetInRange = selectedShip.IsTargetInRange(targetTarget);
-        if (!targetInRange)
-        {
-            var dir = selectedShip.transform.position - targetTarget.transform.position;
-            TargetRay = new Ray(targetTarget.transform.position, dir);
-            var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 20);
-            selectedShip.MoveTo(destination);
-        }
-    }
+    //    selectedShip.SetTarget(targetTarget);
+    //    var targetInRange = selectedShip.IsTargetInRange(targetTarget);
+    //    if (!targetInRange)
+    //    {
+    //        var dir = selectedShip.transform.position - targetTarget.transform.position;
+    //        TargetRay = new Ray(targetTarget.transform.position, dir);
+    //        var destination = TargetRay.Value.GetPoint(selectedShip.targetingRange - 20);
+    //        selectedShip.MoveTo(destination);
+    //    }
+    //}
 
-    private float _mouseButtonDownTime;
-    private float _mouseButtonDebounceInterval = 0.1f;
+    //private float _mouseButtonDownTime;
+    //private float _mouseButtonDebounceInterval = 0.1f;
 
-    private void StartDebounce()
-    {
-        _mouseButtonDownTime = Time.time;
-    }
-    private bool HasDebounceCompleted()
-    {
-        return Time.time - _mouseButtonDownTime > _mouseButtonDebounceInterval;
-    }
+    //private void StartDebounce()
+    //{
+    //    _mouseButtonDownTime = Time.time;
+    //}
+    //private bool HasDebounceCompleted()
+    //{
+    //    return Time.time - _mouseButtonDownTime > _mouseButtonDebounceInterval;
+    //}
 
     public void OnDrawGizmos()
     {

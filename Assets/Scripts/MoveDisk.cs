@@ -46,7 +46,7 @@ public class MoveDisk : MonoBehaviour
 
     public void Deactivate()
     {
-        _verticalOffset = 0;
+        //_verticalOffset = 0;
         gameObject.SetActive(false);
     }
 
