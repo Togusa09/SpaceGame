@@ -41,23 +41,30 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(1))
         {
-            if (control.ClickHitState.Ship != null && !control.ClickHitState.Ship.IsFixed)
+            var selectedShip = SelectionManager.Instance.GetSelectedShip();
+            if (selectedShip != null && !selectedShip.IsFixed)
             {
-                if (control.ClickHitState.Ship.IsHostile)
+                if (control.ClickHitState.Ship != null)
                 {
-                    animator.SetBool(UIAnimationControlParameters.Attacking, true);
+                    if (control.ClickHitState.Ship.IsHostile)
+                    {
+                        animator.SetBool(UIAnimationControlParameters.Attacking, true);
+                    }
+                    else
+                    {
+                        animator.SetBool(UIAnimationControlParameters.Moving, true);
+                    }
+
+                    control.MovementInformation.SetDestination(control.ClickHitState.Ship);
                 }
                 else
                 {
-                    animator.SetBool(UIAnimationControlParameters.Moving, true);
-                }
 
-                control.MovementInformation.SetDestination(control.ClickHitState.Ship);
+                    animator.SetBool(UIAnimationControlParameters.ShowDisk, true);
+                }
             }
-            else
-            {
-                animator.SetBool(UIAnimationControlParameters.ShowDisk, true);
-            }
+
+            
         }
     }
 
