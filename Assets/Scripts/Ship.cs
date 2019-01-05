@@ -306,7 +306,14 @@ public class Ship : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Projectile hit");
-        Destroy(collision.gameObject);
+        var shell = collision.gameObject.GetComponent<Shell>();
+
+        if (shell)
+        {
+            CurrentHealth -= shell.Damage;
+
+            Debug.Log("Projectile hit");
+            Destroy(collision.gameObject);
+        }
     }
 }

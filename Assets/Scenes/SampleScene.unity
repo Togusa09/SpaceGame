@@ -421,6 +421,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
   IsHostile: 1
 --- !u!114 &424693773
 MonoBehaviour:
@@ -442,8 +458,8 @@ MonoBehaviour:
   turnSpeed: 10
   moveSpeed: 0.01
   targetingRange: 80
-  MaxHealth: 0
-  CurrentHealth: 0
+  MaxHealth: 1000
+  CurrentHealth: 1000
   MaxShield: 0
   CurrentShield: 0
 --- !u!1 &534669902
@@ -582,6 +598,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
   IsHostile: 1
 --- !u!65 &575886494
 BoxCollider:
@@ -675,8 +707,8 @@ MonoBehaviour:
   turnSpeed: 10
   moveSpeed: 0.01
   targetingRange: 80
-  MaxHealth: 0
-  CurrentHealth: 0
+  MaxHealth: 1000
+  CurrentHealth: 1000
   MaxShield: 0
   CurrentShield: 0
 --- !u!1 &688482428

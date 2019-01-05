@@ -5,6 +5,7 @@ public class Turret : MonoBehaviour
     public Ship Target;
     public float Speed = 2.0f;
     public float Range = 5f;
+    public int DamagePerShot = 2;
 
     private Transform _barrelTransform;
 
@@ -40,6 +41,7 @@ public class Turret : MonoBehaviour
     private void FireCannon()
     {
         var shell = Instantiate(ShellPrefab, _barrelTransform.position, _barrelTransform.rotation * Quaternion.LookRotation(Vector3.left));
+        shell.Damage = DamagePerShot;
         var rigidBody = shell.GetComponent<Rigidbody>();
         rigidBody.velocity = -_barrelTransform.transform.right * _shellVelocity;
     }
