@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Microsoft.Win32.SafeHandles;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Engine : MonoBehaviour
 {
@@ -39,9 +36,6 @@ public class Engine : MonoBehaviour
             _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
     }
-
-    private float _particleLength = 2.0f;
-
 
     public void OnDrawGizmos()
     {

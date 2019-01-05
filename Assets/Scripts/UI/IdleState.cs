@@ -15,9 +15,7 @@ public class IdleState : StateMachineBehaviour
     {
         var control = animator.GetComponent<Control>();
 
- 
-
-        if ((control.ClickHitState.Target != null && control.ClickHitState.Target.IsHostile) || control.AttackOverride)
+        if ((control.ClickHitState.Ship != null && control.ClickHitState.Ship.IsHostile) || control.AttackOverride)
         {
             control.ShowAttackCursor();
         }
@@ -28,8 +26,7 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (control.AttackOverride &&
-                     (control.ClickHitState.Target != null && control.ClickHitState.Ship != null))
+            if (control.AttackOverride && control.ClickHitState.Ship != null )
             {
                 animator.SetBool(UIAnimationControlParameters.Attacking, true);
             }
@@ -44,16 +41,9 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(1))
         {
-            // Check if mouse is over something
-            if (control.ClickHitState.Ship != null)
+            if (control.ClickHitState.Ship != null && !control.ClickHitState.Ship.IsFixed)
             {
-                // Clicked on ship
-                animator.SetBool(UIAnimationControlParameters.Moving, true);
-                control.MovementInformation.SetDestination(control.ClickHitState.Ship);
-            }
-            else if (control.ClickHitState.Target != null)
-            {
-                if (control.ClickHitState.Target.IsHostile)
+                if (control.ClickHitState.Ship.IsHostile)
                 {
                     animator.SetBool(UIAnimationControlParameters.Attacking, true);
                 }
@@ -62,7 +52,7 @@ public class IdleState : StateMachineBehaviour
                     animator.SetBool(UIAnimationControlParameters.Moving, true);
                 }
 
-                control.MovementInformation.SetDestination(control.ClickHitState.Target);
+                control.MovementInformation.SetDestination(control.ClickHitState.Ship);
             }
             else
             {

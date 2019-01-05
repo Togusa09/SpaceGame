@@ -7,7 +7,10 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
     public Turret TurretPrefab;
-    public Target Target;
+    public Ship Target;
+
+    public bool IsHostile;
+    public bool IsFixed;
 
     private List<Turret> _turrets = new List<Turret>();
     private Vector3 _destination;
@@ -90,15 +93,15 @@ public class Ship : MonoBehaviour
         ProcessMovement();
 
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
-        var targets = targetsInRange.Select(x => x.GetComponent<Target>()).Where(x => x != null).ToList();
+        var targets = targetsInRange.Select(x => x.GetComponent<Ship>()).Where(x => x != null).ToList();
 
         if (CurrentShield <= 0)
         {
-            _shield.SetActive(false);
+            _shield?.SetActive(false);
         }
         else
         {
-            _shield.SetActive(true);
+            _shield?.SetActive(true);
         }
 
         foreach (var turret in _turrets)
@@ -128,7 +131,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public bool IsTargetInRange(Target target = null)
+    public bool IsTargetInRange(Ship target = null)
     {
         if (target == null) target = Target;
         if (target == null) return false;
@@ -164,7 +167,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void SetTarget(Target target)
+    public void SetTarget(Ship target)
     {
         Target = target;
         foreach (var turret in _turrets)
@@ -251,7 +254,7 @@ public class Ship : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 
-    public void Attack(Target target)
+    public void Attack(Ship target)
     {
         SetTarget(target);
         if (!IsTargetInRange(target))
@@ -266,10 +269,10 @@ public class Ship : MonoBehaviour
         _destination = destination;
     }
 
-    public void ApproachTarget(Target target)
-    {
-        ApproachToDistance(target.transform.position, 40.0f + Size/2);
-    }
+    //public void ApproachTarget(Ship target)
+    //{
+    //    ApproachToDistance(target.transform.position, 40.0f + Size/2);
+    //}
 
     public void ApproachTarget(Ship ship)
     {
@@ -299,5 +302,11 @@ public class Ship : MonoBehaviour
     public void StopMovement()
     {
         _destination = transform.position;
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("Projectile hit");
+        Destroy(collision.gameObject);
     }
 }

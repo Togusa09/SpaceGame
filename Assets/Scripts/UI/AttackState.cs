@@ -17,7 +17,7 @@ public class AttackState : StateMachineBehaviour
         var clickState = control.ClickHitState;
         var selectedShip = SelectionManager.Instance.GetSelectedShip();
 
-        selectedShip.Attack(clickState.Target);
+        selectedShip.Attack(clickState.Ship);
         control.AttackOverride = false;
         animator.SetBool(UIAnimationControlParameters.Attacking, false);
     }

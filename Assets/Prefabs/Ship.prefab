@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2265368284515536767
 Transform:
   m_ObjectHideFlags: 0
@@ -103,7 +103,6 @@ GameObject:
   - component: {fileID: 3121322964133822905}
   - component: {fileID: 3121322964133822906}
   - component: {fileID: 2840677492940825663}
-  - component: {fileID: 8730613925964251142}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -149,6 +148,8 @@ MonoBehaviour:
   TurretPrefab: {fileID: 9187016293747572600, guid: b3f8bf47180b4bc4fbf3d56171117a16,
     type: 3}
   Target: {fileID: 0}
+  IsHostile: 0
+  IsFixed: 0
   Selected: 0
   turnSpeed: 10
   moveSpeed: 0.5
@@ -173,19 +174,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8730613925964251142
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3121322964133822904}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 780531f8a8ee8ee438e2b673c0454319, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsHostile: 0
 --- !u!1001 &3121322963171801423
 PrefabInstance:
   m_ObjectHideFlags: 0

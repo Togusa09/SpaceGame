@@ -1,5 +1,4 @@
-﻿using Assets.Scripts;
-using Assets.Scripts.UI;
+﻿using Assets.Scripts.UI;
 using UnityEngine;
 
 public class Control : MonoBehaviour
@@ -24,21 +23,18 @@ public class Control : MonoBehaviour
     }
 
     private MoveDisk _moveDisk;
-    private Ray? TargetRay;
 
     public Texture2D NormalCursor;
     public Texture2D AttackCursor;
 
     private void RaycastTarget()
     {
-        ClickHitState.Target = null;
         ClickHitState.Ship = null;
 
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(mouseRay, out var hitInfo))
         {
-            ClickHitState.Target = hitInfo.transform.GetComponent<Target>();
             ClickHitState.Ship = hitInfo.transform.GetComponent<Ship>();
         }
     }
@@ -58,14 +54,6 @@ public class Control : MonoBehaviour
         RaycastTarget();
     }
     
-    public void OnDrawGizmos()
-    {
-        if (TargetRay.HasValue)
-        {
-            Gizmos.DrawRay(TargetRay.Value);
-        }
-    }
-
     public void StartAttackSelection()
     {
         AttackOverride = true;
