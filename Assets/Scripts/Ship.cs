@@ -66,7 +66,7 @@ public class Ship : MonoBehaviour
         lineRenderer.material.color = Color.green;
         _destinationLine.SetActive(false);
 
-        _shield = transform.Find("Shield").gameObject;
+        _shield = transform.Find("Shield")?.gameObject;
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -86,11 +86,42 @@ public class Ship : MonoBehaviour
 
     private GameObject _shield;
 
+    public void Explode()
+    {
+        var explosion = transform.Find("Explosion");
+        var exp = explosion.GetComponent<ParticleSystem>();
+        
+        if (exp.isPlaying)
+            return;
+
+        var renderers = GetComponentsInChildren<MeshRenderer>();
+        foreach (var meshRenderer in renderers)
+        {
+            meshRenderer.enabled = false;
+        }
+
+        var skinnedRenderers = GetComponentsInChildren<SkinnedMeshRenderer>();
+        foreach (var meshRenderer in skinnedRenderers)
+        {
+            meshRenderer.enabled = false;
+        }
+
+
+
+        exp.Play();
+        //Destroy(gameObject, exp.duration);
+    }
+
     // Update is called once per frame
     void Update()
     {
         ShowLineIfSelected();
         ProcessMovement();
+
+        if (CurrentHealth <= 0)
+        {
+            Explode();
+        }
 
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
         var targets = targetsInRange.Select(x => x.GetComponent<Ship>()).Where(x => x != null).ToList();
