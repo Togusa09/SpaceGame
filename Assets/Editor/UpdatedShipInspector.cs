@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [CustomEditor(typeof(UpdatedShip))]
 public class UpdatedShipInspector : Editor
@@ -39,10 +40,13 @@ public class UpdatedShipInspector : Editor
             var item = list.GetArrayElementAtIndex(i);
             EditorGUILayout.LabelField("Hardpoint " + i);
             EditorGUI.indentLevel += 1;
+            EditorGUILayout.PropertyField(item.FindPropertyRelative("Name"));
             EditorGUILayout.PropertyField(item.FindPropertyRelative("Position"), true);
             var rotation = item.FindPropertyRelative("Rotation");
             //EditorGUILayout.PropertyField(rotation, true);
             var eulerUpdates = EditorGUILayout.Vector3Field("Euler Rotation", rotation.quaternionValue.eulerAngles);
+            EditorGUILayout.PropertyField(item.FindPropertyRelative("Turret"));
+
             if (GUILayout.Button(deleteButtonContent))
             {
                 list.DeleteArrayElementAtIndex(i);
@@ -138,6 +142,54 @@ public class UpdatedShipInspector : Editor
                 
                 //hardpoint.Update();
             }
+        }
+
+        if (_ship.Hardpoints != null)
+        {
+            foreach (var hardpoint in _ship.Hardpoints)
+            {
+                if (hardpoint.Turret == null)
+                {
+                    //Gizmos.DrawSphere(_ship.transform.position + hardpoint.Position, 5f);
+                }
+                else
+                {
+                    //var turretRender = hardpoint.Turret.GetComponentsInChildren<SkinnedMeshRenderer>();
+                   //var turretMesh = hardpoint.Turret.GetComponentsInChildren<MeshFilter>();
+                    var turretRenderer = hardpoint.Turret.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+                    //Graphics.Dr
+                   
+
+                    foreach (var turretRender in turretRenderer)
+                    {
+                        var material = turretRender.sharedMaterial;
+                        material.SetPass(0);
+                        material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+
+                        //Debug
+                        //Gizmos.DrawMesh(meshFilter.sharedMesh, _ship.transform.position + hardpoint.Position, hardpoint.Rotation * _ship.transform.rotation * Quaternion.Euler(-90, 0, 0), Vector3.one);
+                        Graphics.DrawMesh(turretRender.sharedMesh, _ship.transform.position + hardpoint.Position, hardpoint.Rotation * _ship.transform.rotation * Quaternion.Euler(-90, 0, 0),
+                            material, 0, null, 0, null, false, false, false);
+                    }
+                }
+            }
+        }
+
+        //Graphics.DrawMesh();
+        var mesh = _ship.ShipModel.GetComponentsInChildren<MeshFilter>();
+        var renderer = _ship.ShipModel.GetComponentInChildren<MeshRenderer>();
+
+        foreach (var meshFilter in mesh)
+        {
+            var material = renderer.sharedMaterial;
+           // material.SetPass(0);
+            //material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+            
+            //Graphics.DrawMeshNow(meshFilter.sharedMesh, _ship.transform.position, _ship.transform.rotation * Quaternion.Euler(-90, 0, 0));
+            //Graphics.DrawMesh(meshFilter.sharedMesh, _ship.transform.localToWorldMatrix, material, 0);
+            Graphics.DrawMesh(meshFilter.sharedMesh, _ship.transform.position, _ship.transform.rotation * Quaternion.Euler(-90, 0, 0), 
+                material, 0, null, 0, null, false, false, false);
         }
     }
 }
