@@ -5,7 +5,7 @@ using UnityEngine;
 public class UpdatedShip : MonoBehaviour
 {
     public GameObject ShipModel;
-    public List<UpdatedHardpoint> Hardpoints = new List<UpdatedHardpoint> { new UpdatedHardpoint() };
+    //public List<UpdatedHardpoint> Hardpoints = new List<UpdatedHardpoint> { new UpdatedHardpoint() };
 
     //public Vector3[] Hardpoint;
 
