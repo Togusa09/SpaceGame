@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.UI;
+using Scripts.Ship;
 using UnityEngine;
 
 public class Control : MonoBehaviour
@@ -15,7 +16,7 @@ public class Control : MonoBehaviour
         _moveDisk.enabled = true;
     }
 
-    public ClickHitState ClickHitState;
+    //public ClickHitState ClickHitState;
 
     public MoveDisk GetMoveDisk()
     {
@@ -27,15 +28,17 @@ public class Control : MonoBehaviour
     public Texture2D NormalCursor;
     public Texture2D AttackCursor;
 
+    public ShipAppearance MouseOverTarget;
+
     private void RaycastTarget()
     {
-        ClickHitState.OldShip = null;
+        MouseOverTarget = null;
 
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(mouseRay, out var hitInfo))
         {
-            ClickHitState.OldShip = hitInfo.transform.GetComponent<OldShip>();
+            MouseOverTarget = hitInfo.transform.GetComponent<ShipAppearance>();
         }
     }
 

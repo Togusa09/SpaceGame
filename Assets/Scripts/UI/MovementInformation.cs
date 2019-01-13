@@ -1,4 +1,5 @@
 ﻿
+using Scripts.Ship;
 using UnityEngine;
 
 namespace Assets.Scripts.UI
@@ -14,12 +15,12 @@ namespace Assets.Scripts.UI
         public MoveTargetType MoveTargetType { get; private set; }
 
         public Vector3 Location { get; private set; }
-        public OldShip OldShip { get; private set; }
+        public ShipAppearance Ship { get; private set; }
 
         private void SetAllNull()
         {
             Location = Vector3.zero;
-            OldShip = null;
+            Ship = null;
         }
 
         public void SetDestination(Vector3 location)
@@ -29,10 +30,10 @@ namespace Assets.Scripts.UI
             MoveTargetType = MoveTargetType.Position;
         }
 
-        public void SetDestination(OldShip oldShip)
+        public void SetDestination(ShipAppearance oldShip)
         {
             SetAllNull();
-            OldShip = oldShip;
+            Ship = oldShip;
             MoveTargetType = MoveTargetType.Ship;
         }
     }

@@ -1,4 +1,6 @@
 ﻿using Assets.Scripts;
+using Scripts.Ship;
+using Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,11 +35,29 @@ public class StatusUiPanel : MonoBehaviour
     void Update()
     {
         var selectedShip = SelectionManager.Instance.GetSelectedShip();
+        
+
         if (selectedShip != null)
         {
+            var health = selectedShip.GetComponent<Destructable>();
+            if (health)
+            {
+                _shipHealth.text = $"{health.CurrentHealth}/{health.MaxHealth}";
+                _healthBar.BarValue = ((float)health.CurrentHealth / (float)health.MaxHealth) * 100.0f;
+            }
+            else
+            {
+                _shipHealth.text = string.Empty;
+            }
+
+            var shield = selectedShip.GetComponent<Shield>();
+            if (shield)
+            {
+
+            }
+
+            
             _shipName.text = selectedShip.name;
-            _shipHealth.text = $"{selectedShip.CurrentHealth}/{selectedShip.MaxHealth}";
-            _healthBar.BarValue = ((float)selectedShip.CurrentHealth / (float)selectedShip.MaxHealth) * 100.0f;
             _attackButton.interactable = true;
             //_moveButton.interactable = true;
             _stopButton.interactable = true;

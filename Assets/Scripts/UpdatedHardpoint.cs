@@ -4,8 +4,9 @@
 public class UpdatedHardpoint : MonoBehaviour
 {
     public string Name;
-    //public Vector3 Position;
-    //public Quaternion Rotation;
+    public bool CanFire;
+
+    
     public UpdatedTurret Turret;
 
     public UpdatedHardpoint()

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Scripts.Ship;
 using UnityEditor;
 using UnityEngine;
 
@@ -69,25 +70,26 @@ public class TurretMountingInspector : Editor
 
     public static void ShowTurret(UpdatedHardpoint[] list)
     {
-        for (int i = 0; i < list.Count(); i++)
+        for (var i = 0; i < list.Count(); i++)
         {
             EditorGUI.BeginChangeCheck();
 
             EditorGUILayout.LabelField("Hardpoint " + i);
             EditorGUI.indentLevel += 1;
+            EditorGUILayout.BeginHorizontal();
             list[i].transform.name = EditorGUILayout.TextField(list[i].transform.name);
+            if (GUILayout.Button(deleteButtonContent, GUILayout.Width(30)))
+            {
+                GameObject.DestroyImmediate(list[i]);
+            }
+            EditorGUILayout.EndHorizontal();
 
             var eulerUpdates = EditorGUILayout.Vector3Field("Euler Rotation", list[i].transform.eulerAngles);
             list[i].transform.rotation = Quaternion.Euler(eulerUpdates);
 
             list[i].transform.localPosition = EditorGUILayout.Vector3Field("Position", list[i].transform.localPosition);
-            list[i].Turret = (UpdatedTurret)EditorGUILayout.ObjectField("Turret", list[i].Turret, typeof(UpdatedTurret), false);
+            list[i].Turret = (UpdatedTurret)EditorGUILayout.ObjectField("Turret Prefab", list[i].Turret, typeof(UpdatedTurret), false);
             list[i].hideFlags = HideFlags.None;
-
-            if (GUILayout.Button(deleteButtonContent))
-            {
-                GameObject.DestroyImmediate(list[i]);
-            }
 
             EditorGUI.indentLevel -= 1;
         }
@@ -124,13 +126,11 @@ public class TurretMountingInspector : Editor
             if (Tools.current == Tool.Move)
             {
                 positions[index] = Handles.PositionHandle(hardpoint.transform.position, hardpoint.transform.rotation);
-
             }
             else if (Tools.current == Tool.Rotate)
             {
                 rotations[index] = Handles.RotationHandle(hardpoint.transform.rotation, hardpoint.transform.position);
             }
-
 
             Vector3 position = hardpoint.transform.position + Vector3.up * 2f;
             string posString = position.ToString();

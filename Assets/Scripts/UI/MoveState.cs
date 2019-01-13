@@ -1,6 +1,7 @@
 ﻿using System;
 using Assets.Scripts;
 using Assets.Scripts.UI;
+using Scripts.UI;
 using UnityEngine;
 
 public class MoveState : StateMachineBehaviour
@@ -25,7 +26,7 @@ public class MoveState : StateMachineBehaviour
                 selectionManager.GetSelectedShip().MoveTo(movement.Location);
                 break;
             case MoveTargetType.Ship:
-                selectionManager.GetSelectedShip().ApproachTarget(movement.OldShip);
+                selectionManager.GetSelectedShip().ApproachTarget(movement.Ship);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

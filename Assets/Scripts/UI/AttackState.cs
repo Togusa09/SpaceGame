@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.UI;
+using Scripts.Ship;
+using Scripts.UI;
 using UnityEngine;
 
 public class AttackState : StateMachineBehaviour
@@ -14,10 +16,13 @@ public class AttackState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         var control = animator.GetComponent<Control>();
-        var clickState = control.ClickHitState;
         var selectedShip = SelectionManager.Instance.GetSelectedShip();
-
-        selectedShip.Attack(clickState.OldShip);
+        var turretMount = selectedShip.GetComponent<TurretMounting>();
+        if (turretMount)
+        {
+            turretMount.Attack(control.MouseOverTarget);
+        }
+        
         control.AttackOverride = false;
         animator.SetBool(UIAnimationControlParameters.Attacking, false);
     }

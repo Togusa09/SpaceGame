@@ -5,6 +5,7 @@ using UnityEngine;
 public class UpdatedTurret : MonoBehaviour
 {
     public GameObject TurretModel;
+    public bool CanFire { get; set; }
 
     // Start is called before the first frame update
     void Start()

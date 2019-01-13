@@ -1,5 +1,6 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.UI;
+using Scripts.UI;
 using UnityEngine;
 
 public class IdleState : StateMachineBehaviour
@@ -15,7 +16,7 @@ public class IdleState : StateMachineBehaviour
     {
         var control = animator.GetComponent<Control>();
 
-        if ((control.ClickHitState.OldShip != null && control.ClickHitState.OldShip.IsHostile) || control.AttackOverride)
+        if ((control.MouseOverTarget != null && control.MouseOverTarget.IsHostile) || control.AttackOverride)
         {
             control.ShowAttackCursor();
         }
@@ -26,15 +27,15 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (control.AttackOverride && control.ClickHitState.OldShip != null )
+            if (control.AttackOverride && control.MouseOverTarget != null )
             {
                 animator.SetBool(UIAnimationControlParameters.Attacking, true);
             }
             else
             {
-                if (control.ClickHitState.OldShip != null)
+                if (control.MouseOverTarget != null)
                 {
-                    SelectionManager.Instance.SelectShip(control.ClickHitState.OldShip);
+                    SelectionManager.Instance.SelectShip(control.MouseOverTarget);
                 }
             }
         }
@@ -44,9 +45,9 @@ public class IdleState : StateMachineBehaviour
             var selectedShip = SelectionManager.Instance.GetSelectedShip();
             if (selectedShip != null && !selectedShip.IsFixed)
             {
-                if (control.ClickHitState.OldShip != null)
+                if (control.MouseOverTarget != null)
                 {
-                    if (control.ClickHitState.OldShip.IsHostile)
+                    if (control.MouseOverTarget.IsHostile)
                     {
                         animator.SetBool(UIAnimationControlParameters.Attacking, true);
                     }
@@ -55,7 +56,7 @@ public class IdleState : StateMachineBehaviour
                         animator.SetBool(UIAnimationControlParameters.Moving, true);
                     }
 
-                    control.MovementInformation.SetDestination(control.ClickHitState.OldShip);
+                    control.MovementInformation.SetDestination(control.MouseOverTarget);
                 }
                 else
                 {
