@@ -2,7 +2,7 @@
 
 public class Turret : MonoBehaviour
 {
-    public Ship Target;
+    public OldShip Target;
     public float Speed = 2.0f;
     public float Range = 5f;
     public int DamagePerShot = 2;
@@ -84,7 +84,7 @@ public class Turret : MonoBehaviour
         return targetAngle < 10.0f;
     }
 
-    public void SetTarget(Ship target)
+    public void SetTarget(OldShip target)
     {
         if (Target != target)
         {

@@ -14,12 +14,12 @@ namespace Assets.Scripts.UI
         public MoveTargetType MoveTargetType { get; private set; }
 
         public Vector3 Location { get; private set; }
-        public Ship Ship { get; private set; }
+        public OldShip OldShip { get; private set; }
 
         private void SetAllNull()
         {
             Location = Vector3.zero;
-            Ship = null;
+            OldShip = null;
         }
 
         public void SetDestination(Vector3 location)
@@ -29,10 +29,10 @@ namespace Assets.Scripts.UI
             MoveTargetType = MoveTargetType.Position;
         }
 
-        public void SetDestination(Ship ship)
+        public void SetDestination(OldShip oldShip)
         {
             SetAllNull();
-            Ship = ship;
+            OldShip = oldShip;
             MoveTargetType = MoveTargetType.Ship;
         }
     }

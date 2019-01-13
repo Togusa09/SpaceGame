@@ -15,7 +15,7 @@ public class IdleState : StateMachineBehaviour
     {
         var control = animator.GetComponent<Control>();
 
-        if ((control.ClickHitState.Ship != null && control.ClickHitState.Ship.IsHostile) || control.AttackOverride)
+        if ((control.ClickHitState.OldShip != null && control.ClickHitState.OldShip.IsHostile) || control.AttackOverride)
         {
             control.ShowAttackCursor();
         }
@@ -26,15 +26,15 @@ public class IdleState : StateMachineBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            if (control.AttackOverride && control.ClickHitState.Ship != null )
+            if (control.AttackOverride && control.ClickHitState.OldShip != null )
             {
                 animator.SetBool(UIAnimationControlParameters.Attacking, true);
             }
             else
             {
-                if (control.ClickHitState.Ship != null)
+                if (control.ClickHitState.OldShip != null)
                 {
-                    SelectionManager.Instance.SelectShip(control.ClickHitState.Ship);
+                    SelectionManager.Instance.SelectShip(control.ClickHitState.OldShip);
                 }
             }
         }
@@ -44,9 +44,9 @@ public class IdleState : StateMachineBehaviour
             var selectedShip = SelectionManager.Instance.GetSelectedShip();
             if (selectedShip != null && !selectedShip.IsFixed)
             {
-                if (control.ClickHitState.Ship != null)
+                if (control.ClickHitState.OldShip != null)
                 {
-                    if (control.ClickHitState.Ship.IsHostile)
+                    if (control.ClickHitState.OldShip.IsHostile)
                     {
                         animator.SetBool(UIAnimationControlParameters.Attacking, true);
                     }
@@ -55,7 +55,7 @@ public class IdleState : StateMachineBehaviour
                         animator.SetBool(UIAnimationControlParameters.Moving, true);
                     }
 
-                    control.MovementInformation.SetDestination(control.ClickHitState.Ship);
+                    control.MovementInformation.SetDestination(control.ClickHitState.OldShip);
                 }
                 else
                 {

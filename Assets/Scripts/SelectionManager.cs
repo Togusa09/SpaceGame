@@ -8,18 +8,18 @@
             get { return _instance ?? (_instance = new SelectionManager()); }
         }
 
-        private Ship _selectedShip;
+        private OldShip _selectedOldShip;
 
-        public void SelectShip(Ship ship)
+        public void SelectShip(OldShip oldShip)
         {
-            if (_selectedShip != null) {_selectedShip.Selected = false;}
-            _selectedShip = ship;
-            _selectedShip.Selected = true;
+            if (_selectedOldShip != null) {_selectedOldShip.Selected = false;}
+            _selectedOldShip = oldShip;
+            _selectedOldShip.Selected = true;
         }
 
-        public Ship GetSelectedShip()
+        public OldShip GetSelectedShip()
         {
-            return _selectedShip;
+            return _selectedOldShip;
         }
     }
 }

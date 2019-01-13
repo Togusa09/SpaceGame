@@ -4,10 +4,10 @@ using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
 
-public class Ship : MonoBehaviour
+public class OldShip : MonoBehaviour
 {
     public Turret TurretPrefab;
-    public Ship Target;
+    public OldShip Target;
 
     public bool IsHostile;
     public bool IsFixed;
@@ -124,7 +124,7 @@ public class Ship : MonoBehaviour
         }
 
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
-        var targets = targetsInRange.Select(x => x.GetComponent<Ship>()).Where(x => x != null).ToList();
+        var targets = targetsInRange.Select(x => x.GetComponent<OldShip>()).Where(x => x != null).ToList();
 
         if (CurrentShield <= 0)
         {
@@ -162,7 +162,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public bool IsTargetInRange(Ship target = null)
+    public bool IsTargetInRange(OldShip target = null)
     {
         if (target == null) target = Target;
         if (target == null) return false;
@@ -198,7 +198,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void SetTarget(Ship target)
+    public void SetTarget(OldShip target)
     {
         Target = target;
         foreach (var turret in _turrets)
@@ -285,7 +285,7 @@ public class Ship : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 
-    public void Attack(Ship target)
+    public void Attack(OldShip target)
     {
         SetTarget(target);
         if (!IsTargetInRange(target))
@@ -300,14 +300,14 @@ public class Ship : MonoBehaviour
         _destination = destination;
     }
 
-    //public void ApproachTarget(Ship target)
+    //public void ApproachTarget(OldShip target)
     //{
     //    ApproachToDistance(target.transform.position, 40.0f + Size/2);
     //}
 
-    public void ApproachTarget(Ship ship)
+    public void ApproachTarget(OldShip oldShip)
     {
-        ApproachToDistance(ship.transform.position, ship.Size);
+        ApproachToDistance(oldShip.transform.position, oldShip.Size);
     }
 
     public void ApproachToWeaponsRange(Vector3 position)

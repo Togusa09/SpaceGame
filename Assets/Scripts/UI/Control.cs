@@ -29,13 +29,13 @@ public class Control : MonoBehaviour
 
     private void RaycastTarget()
     {
-        ClickHitState.Ship = null;
+        ClickHitState.OldShip = null;
 
         var mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(mouseRay, out var hitInfo))
         {
-            ClickHitState.Ship = hitInfo.transform.GetComponent<Ship>();
+            ClickHitState.OldShip = hitInfo.transform.GetComponent<OldShip>();
         }
     }
 

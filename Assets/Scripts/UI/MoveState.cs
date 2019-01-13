@@ -25,7 +25,7 @@ public class MoveState : StateMachineBehaviour
                 selectionManager.GetSelectedShip().MoveTo(movement.Location);
                 break;
             case MoveTargetType.Ship:
-                selectionManager.GetSelectedShip().ApproachTarget(movement.Ship);
+                selectionManager.GetSelectedShip().ApproachTarget(movement.OldShip);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
