@@ -7,7 +7,6 @@ namespace Scripts.Ship
     [RequireComponent(typeof(ShipAppearance))]
     public class TurretMounting : MonoBehaviour
     {
-        public GameObject ShipModel;
         public float TargetingRange;
 
         private ShipAppearance _shipAppearance;
@@ -20,7 +19,6 @@ namespace Scripts.Ship
         // Start is called before the first frame update
         void Start()
         {
-            var model = Instantiate(ShipModel, transform);
             _shipAppearance = GetComponent<ShipAppearance>();
             _hardpoints = GetComponentsInChildren<UpdatedHardpoint>();
             _turrets = new List<UpdatedTurret>();

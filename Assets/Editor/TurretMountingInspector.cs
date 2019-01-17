@@ -7,7 +7,7 @@ using UnityEngine;
 public class TurretMountingInspector : Editor
 {
     private TurretMounting _turretMounting;
-    
+
     private static GUIContent
         moveButtonContent = new GUIContent("\u21b4", "move down"),
         newButtonContent = new GUIContent("+", "duplicate"),
@@ -15,7 +15,7 @@ public class TurretMountingInspector : Editor
 
     void OnEnable()
     {
-        _turretMounting = (TurretMounting) target;
+        _turretMounting = (TurretMounting)target;
 
         var hardpoints = _turretMounting.GetComponentsInChildren<UpdatedHardpoint>();
         foreach (var hardpoint in hardpoints)
@@ -50,23 +50,23 @@ public class TurretMountingInspector : Editor
         }
     }
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+    //public override void OnInspectorGUI()
+    //{
+    //    serializedObject.Update();
 
-        var list = _turretMounting.GetComponentsInChildren<UpdatedHardpoint>();
-        ShowTurret(list);
-        if (GUILayout.Button(newButtonContent))
-        {
-            var turret = new GameObject("Hardpoint");
-            turret.AddComponent<UpdatedHardpoint>();
-            turret.transform.SetParent(_turretMounting.transform);
-            turret.transform.localPosition = Vector3.zero;
-            turret.hideFlags = HideFlags.HideAndDontSave;
-        }
+    //    var list = _turretMounting.GetComponentsInChildren<UpdatedHardpoint>();
+    //    ShowTurret(list);
+    //    if (GUILayout.Button(newButtonContent))
+    //    {
+    //        var turret = new GameObject("Hardpoint");
+    //        turret.AddComponent<UpdatedHardpoint>();
+    //        turret.transform.SetParent(_turretMounting.transform);
+    //        turret.transform.localPosition = Vector3.zero;
+    //        turret.hideFlags = HideFlags.HideAndDontSave;
+    //    }
 
-        serializedObject.ApplyModifiedProperties();
-    }
+    //    serializedObject.ApplyModifiedProperties();
+    //}
 
     public static void ShowTurret(UpdatedHardpoint[] list)
     {
@@ -96,66 +96,66 @@ public class TurretMountingInspector : Editor
     }
 
 
-    protected virtual void OnSceneGUI()
-    {
-        TurretMounting example = (TurretMounting)target;
+    //protected virtual void OnSceneGUI()
+    //{
+    //    TurretMounting example = (TurretMounting)target;
 
-        var hardpoints = example.GetComponentsInChildren<UpdatedHardpoint>();
-    
-        EditorGUI.BeginChangeCheck();
+    //    var hardpoints = example.GetComponentsInChildren<UpdatedHardpoint>();
 
-        Vector3[] positions = new Vector3[hardpoints.Count()];
-        Quaternion[] rotations = new Quaternion[hardpoints.Count()];
+    //    EditorGUI.BeginChangeCheck();
+
+    //    Vector3[] positions = new Vector3[hardpoints.Count()];
+    //    Quaternion[] rotations = new Quaternion[hardpoints.Count()];
 
 
-        GUIStyle style = new GUIStyle();
-        style.normal.textColor = Color.green;
+    //    GUIStyle style = new GUIStyle();
+    //    style.normal.textColor = Color.green;
 
-        for (var index = 0; index < hardpoints.Count(); index++)
-        {
-            var hardpoint = hardpoints[index];
+    //    for (var index = 0; index < hardpoints.Count(); index++)
+    //    {
+    //        var hardpoint = hardpoints[index];
 
-            if (hardpoint.transform.rotation == new Quaternion())
-            {
-                hardpoint.transform.rotation = Quaternion.identity;
-            }
+    //        if (hardpoint.transform.rotation == new Quaternion())
+    //        {
+    //            hardpoint.transform.rotation = Quaternion.identity;
+    //        }
 
-            positions[index] = hardpoint.transform.position;
-            rotations[index] = hardpoint.transform.rotation;
+    //        positions[index] = hardpoint.transform.position;
+    //        rotations[index] = hardpoint.transform.rotation;
 
-            if (Tools.current == Tool.Move)
-            {
-                positions[index] = Handles.PositionHandle(hardpoint.transform.position, hardpoint.transform.rotation);
-            }
-            else if (Tools.current == Tool.Rotate)
-            {
-                rotations[index] = Handles.RotationHandle(hardpoint.transform.rotation, hardpoint.transform.position);
-            }
+    //        if (Tools.current == Tool.Move)
+    //        {
+    //            positions[index] = Handles.PositionHandle(hardpoint.transform.position, hardpoint.transform.rotation);
+    //        }
+    //        else if (Tools.current == Tool.Rotate)
+    //        {
+    //            rotations[index] = Handles.RotationHandle(hardpoint.transform.rotation, hardpoint.transform.position);
+    //        }
 
-            Vector3 position = hardpoint.transform.position + Vector3.up * 2f;
-            string posString = position.ToString();
+    //        Vector3 position = hardpoint.transform.position + Vector3.up * 2f;
+    //        string posString = position.ToString();
 
-            Handles.Label(position,
-                posString + "\nName: " +
-                hardpoint.Name,
-                style
-            );
-        }
+    //        Handles.Label(position,
+    //            posString + "\nName: " +
+    //            hardpoint.Name,
+    //            style
+    //        );
+    //    }
 
-        if (EditorGUI.EndChangeCheck())
-        {
-            for (var index = 0; index < hardpoints.Count(); index++)
-            {
-                var hardPoint = hardpoints[index];
-                if (hardPoint.transform.position != positions[index] || hardPoint.transform.rotation != rotations[index])
-                {
-                    Undo.RecordObject(example, "Updated hard point");
-                    hardPoint.transform.position = positions[index];
-                    hardPoint.transform.rotation = rotations[index];
-                }
-            }
-        }
-        
-        EditorUtility.SetDirty(target);
-    }
+    //    if (EditorGUI.EndChangeCheck())
+    //    {
+    //        for (var index = 0; index < hardpoints.Count(); index++)
+    //        {
+    //            var hardPoint = hardpoints[index];
+    //            if (hardPoint.transform.position != positions[index] || hardPoint.transform.rotation != rotations[index])
+    //            {
+    //                Undo.RecordObject(example, "Updated hard point");
+    //                hardPoint.transform.position = positions[index];
+    //                hardPoint.transform.rotation = rotations[index];
+    //            }
+    //        }
+    //    }
+
+    //    EditorUtility.SetDirty(target);
+    //}
 }

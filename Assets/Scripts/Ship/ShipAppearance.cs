@@ -27,7 +27,12 @@ namespace Scripts.Ship
         // Start is called before the first frame update
         void Start()
         {
-            var model = Instantiate(ShipModel, transform);
+            var model = transform.Find("ShipModel");
+            if (!model)
+            {
+                Instantiate(ShipModel, transform);
+            }
+
 
             _destination = transform.position;
 
@@ -111,17 +116,17 @@ namespace Scripts.Ship
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * TurnSpeed);
             }
 
-            //var remainingAngle = Quaternion.Angle(transform.rotation, direction);
-            //if (Mathf.Abs(remainingAngle) < 2)
-            //{
-            //    transform.position = Vector3.MoveTowards(transform.position, _destination, MoveSpeed);
+            var remainingAngle = Quaternion.Angle(transform.rotation, direction);
+            if (Mathf.Abs(remainingAngle) < 2)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _destination, MoveSpeed);
 
-            //    foreach (var engine in _engines)
-            //    {
-            //        engine.StartEngine();
-            //    }
-            //}
-        }
+                //    foreach (var engine in _engines)
+                //    {
+                //        engine.StartEngine();
+                //    }
+                }
+            }
 
         private void ShowLineIfSelected()
         {

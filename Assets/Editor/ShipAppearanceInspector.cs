@@ -66,7 +66,10 @@ public class ShipAppearanceInspector : Editor
         {
             UpdateShipModel();
         }
- 
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("MoveSpeed"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("TurnSpeed"));
+
         serializedObject.ApplyModifiedProperties();
     }
 
