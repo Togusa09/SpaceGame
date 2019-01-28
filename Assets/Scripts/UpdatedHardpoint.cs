@@ -7,7 +7,7 @@ public class UpdatedHardpoint : MonoBehaviour
     public bool CanFire;
 
     
-    public UpdatedTurret Turret;
+    public UpdatedTurret TurretPrefab;
 
     public UpdatedHardpoint()
     {

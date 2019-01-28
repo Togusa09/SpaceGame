@@ -35,7 +35,7 @@ namespace Scripts.Ship
         private UpdatedTurret AttachTurret(UpdatedHardpoint hardpoint)
         {
             //var turret = (UpdatedTurret)Instantiate(hardpoint.Turret.TurretModel, hardpoint.transform);
-            var turret = Instantiate(hardpoint.Turret, hardpoint.transform);
+            var turret = Instantiate(hardpoint.TurretPrefab, hardpoint.transform);
             return turret;
         }
 

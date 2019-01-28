@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Assets.Scripts;
 using UnityEngine;
 
@@ -32,7 +33,6 @@ namespace Scripts.Ship
             {
                 Instantiate(ShipModel, transform);
             }
-
 
             _destination = transform.position;
 
@@ -92,41 +92,83 @@ namespace Scripts.Ship
             }
         }
 
+        private enum MoveState
+        {
+            Stopped,
+            Turning,
+            Moving
+        }
+
+        private MoveState _moveState;
+
         private void ProcessMovement()
         {
-            // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
+            
 
-            var dirVector = DestinationVectorLocal;
+            switch (_moveState)
+            {
+                case MoveState.Stopped:
+                    ProcessMoveStopped();
+                    break;
+                case MoveState.Turning:
+                    ProcessTurning();
+                    break;
+                case MoveState.Moving:
+                    ProcessMoving();
+                    break;
+            }
+        }
 
-            //if (dirVector == Vector3.zero)
-            //{
+        private void ProcessMoveStopped()
+        {
             //    foreach (var engine in _engines)
             //    {
             //        engine.StopEngine();
             //    }
-            //    return;
-            //}
-
-            var direction = Quaternion.LookRotation(dirVector, Vector3.up);
-
             if (DestinationDistance > 0.1f)
             {
-                // Lerp rotation
-
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * TurnSpeed);
+                _moveState = MoveState.Turning;
             }
+        }
+
+        private void ProcessMoving()
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _destination, MoveSpeed);
+
+            //    foreach (var engine in _engines)
+            //    {
+            //        engine.StartEngine();
+            //    }
+
+            if (DestinationDistance < 0.1f)
+            {
+                _moveState = MoveState.Stopped;
+            }
+
+            var direction = Quaternion.LookRotation(DestinationVectorLocal, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * TurnSpeed);
+            var remainingAngle = Quaternion.Angle(transform.rotation, direction);
+
+            if (Mathf.Abs(remainingAngle) < 2)
+            {
+                _moveState = MoveState.Turning;
+            }
+        }
+
+        private void ProcessTurning()
+        {
+            // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
+
+            var direction = Quaternion.LookRotation(DestinationVectorLocal, Vector3.up);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * TurnSpeed);
 
             var remainingAngle = Quaternion.Angle(transform.rotation, direction);
             if (Mathf.Abs(remainingAngle) < 2)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _destination, MoveSpeed);
-
-                //    foreach (var engine in _engines)
-                //    {
-                //        engine.StartEngine();
-                //    }
-                }
+                _moveState = MoveState.Moving;
             }
+        }
 
         private void ShowLineIfSelected()
         {
@@ -150,6 +192,8 @@ namespace Scripts.Ship
         public void StopAll()
         {
             GetComponent<TurretMounting>().StopAll();
+            _moveState = MoveState.Stopped;
+            _destination = transform.position;
         }
 
         public void MoveTo(Vector3 destination)

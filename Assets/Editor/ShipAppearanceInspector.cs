@@ -25,6 +25,7 @@ public class ShipAppearanceInspector : Editor
 
             shipModel.name = "ShipModel";
             shipModel.hideFlags = HideFlags.NotEditable | HideFlags.DontSave;
+            shipModel.transform.localEulerAngles = new Vector3(0, 90, 0);
             foreach (Transform model in shipModel.transform)
             {
                 model.gameObject.hideFlags = HideFlags.NotEditable;
@@ -39,11 +40,9 @@ public class ShipAppearanceInspector : Editor
             }
 
             var boxCollider = _shipAppearance.GetComponent<BoxCollider>();
-            boxCollider.center = bounds.center;
-            boxCollider.center = bounds.center;
             // Unity models are rotated 90 degress...
-            boxCollider.size = new Vector3(bounds.size.x, bounds.size.z, bounds.size.y);
-
+            boxCollider.size = new Vector3(bounds.size.y, bounds.size.z, bounds.size.x);
+            boxCollider.center = new Vector3(bounds.center.y, bounds.center.z, -bounds.center.x);
         }
         else if (!_shipAppearance.ShipModel)
         {
