@@ -103,8 +103,6 @@ namespace Scripts.Ship
 
         private void ProcessMovement()
         {
-            
-
             switch (_moveState)
             {
                 case MoveState.Stopped:
@@ -143,13 +141,15 @@ namespace Scripts.Ship
             if (DestinationDistance < 0.1f)
             {
                 _moveState = MoveState.Stopped;
+                return;
             }
 
             var direction = Quaternion.LookRotation(DestinationVectorLocal, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, direction, Time.deltaTime * TurnSpeed);
-            var remainingAngle = Quaternion.Angle(transform.rotation, direction);
 
-            if (Mathf.Abs(remainingAngle) < 2)
+            var angle = Vector3.Angle(transform.forward, DestinationVectorLocal);
+
+            if (angle < 2)
             {
                 _moveState = MoveState.Turning;
             }

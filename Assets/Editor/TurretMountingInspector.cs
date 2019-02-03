@@ -41,8 +41,6 @@ public class TurretMountingInspector : Editor
                 Transform = new SerializedObject(hardpoint.transform)
             });
         }
-
-
     }
 
     void UpdateTurretModel(UpdatedHardpoint hardpoint)
@@ -91,43 +89,14 @@ public class TurretMountingInspector : Editor
             EditorGUI.BeginChangeCheck();
 
             var gameObjectName = gameObject.FindProperty("m_Name");
-            //var transformName = transform.FindProperty("Name");
+
             EditorGUILayout.PropertyField(gameObjectName);
 
-            //var name = EditorGUILayout.TextField("Name", gameObject.targetObject.name);
-            //if (EditorGUI.EndChangeCheck())
-            //{
-            //    gameObject.targetObject.name = name;
-            //}
 
             var positionProperty = transform.FindProperty("m_LocalPosition");
             EditorGUILayout.PropertyField(positionProperty);
-            //var test = hardpoint.FindProperty("TurretPrefab");
-            
 
-            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(hardpoint.FindProperty("TurretPrefab"));
-            if (EditorGUI.EndChangeCheck())
-            {
-                var t = 3;
-
-                
-            }
-
-            // var turretProperty = hardpoint.FindProperty("Turret");
-            //EditorGUILayout.PropertyField(turretProperty, true);
-            
-            //list[i].transform.localPosition = EditorGUILayout.Vector3Field("Position", list[i].transform.localPosition);
-            //list[i].Turret = (UpdatedTurret)EditorGUILayout.ObjectField("Turret Prefab", list[i].Turret, typeof(UpdatedTurret), false);
-
-            //var test = new List<string>();
-            //var prop = hardpoint.GetIterator();
-            //do
-            //{
-            //    test.Add(prop.name);
-
-            //} while (prop.Next(true));
-
 
             if (GUILayout.Button(deleteButtonContent))
             {
@@ -164,24 +133,6 @@ public class TurretMountingInspector : Editor
             });
         }
     }
-
-    //public override void OnInspectorGUI()
-    //{
-    //    serializedObject.Update();
-
-    //    var list = _turretMounting.GetComponentsInChildren<UpdatedHardpoint>();
-    //    ShowTurret(list);
-    //    if (GUILayout.Button(newButtonContent))
-    //    {
-    //        var turret = new GameObject("Hardpoint");
-    //        turret.AddComponent<UpdatedHardpoint>();
-    //        turret.transform.SetParent(_turretMounting.transform);
-    //        turret.transform.localPosition = Vector3.zero;
-    //        turret.hideFlags = HideFlags.HideAndDontSave;
-    //    }
-
-    //    serializedObject.ApplyModifiedProperties();
-    //}
 
     public static void ShowTurret(UpdatedHardpoint[] list)
     {
@@ -223,13 +174,9 @@ public class TurretMountingInspector : Editor
 
             var obj = transform.targetObject as Transform;
 
-            //var positionProperty = transform.FindProperty("m_LocalPosition");
-            //var rotationProperty = transform.FindProperty("m_LocalRotation");
-
             if (Tools.current == Tool.Move)
             {
                 EditorGUI.BeginChangeCheck();
-                //positions[index] = Handles.PositionHandle(hardpoint.transform.position, hardpoint.transform.rotation);
                 var position = Handles.PositionHandle(
                     obj.position, obj.rotation);
 
