@@ -322,7 +322,6 @@ GameObject:
   - component: {fileID: 424693770}
   - component: {fileID: 424693769}
   - component: {fileID: 424693768}
-  - component: {fileID: 424693772}
   - component: {fileID: 424693773}
   m_Layer: 0
   m_Name: Target
@@ -403,41 +402,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &424693772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 424693767}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 780531f8a8ee8ee438e2b673c0454319, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsHostile: 1
 --- !u!114 &424693773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -571,7 +535,6 @@ GameObject:
   - component: {fileID: 575886496}
   - component: {fileID: 575886495}
   - component: {fileID: 575886494}
-  - component: {fileID: 575886493}
   - component: {fileID: 575886498}
   m_Layer: 0
   m_Name: Target (1)
@@ -580,41 +543,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &575886493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 575886492}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 780531f8a8ee8ee438e2b673c0454319, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsHostile: 1
 --- !u!65 &575886494
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1337,7 +1265,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1217021509}
   - component: {fileID: 1217021508}
-  - component: {fileID: 1217021510}
   m_Layer: 0
   m_Name: Control
   m_TagString: Untagged
@@ -1354,7 +1281,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1217021507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aaf3fc87a39ae040b5998743131cb98, type: 3}
+  m_Script: {fileID: 11500000, guid: 1df6215af33ef53478d8a78fac44bed5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   AttackOverride: 0
@@ -1374,25 +1301,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &1217021510
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1217021507}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2236b9137de0c474db7a3df84111b2f5, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 1
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1280409098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1852,7 +1760,7 @@ PrefabInstance:
     - target: {fileID: 3121322964133822904, guid: ebaf95d9432b5194abe1d60385786316,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3121322964133822905, guid: ebaf95d9432b5194abe1d60385786316,
         type: 3}

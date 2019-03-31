@@ -66,7 +66,7 @@ public class Ship : MonoBehaviour
         lineRenderer.material.color = Color.green;
         _destinationLine.SetActive(false);
 
-        _shield = transform.Find("Shield").gameObject;
+        _shield = transform.Find("Shield")?.gameObject;
     }
 
     private Turret AttachTurret(Transform attachmentNode)
@@ -95,13 +95,16 @@ public class Ship : MonoBehaviour
         var targetsInRange = Physics.OverlapSphere(transform.position, targetingRange);
         var targets = targetsInRange.Select(x => x.GetComponent<Ship>()).Where(x => x != null).ToList();
 
-        if (CurrentShield <= 0)
+        if (_shield)
         {
-            _shield?.SetActive(false);
-        }
-        else
-        {
-            _shield?.SetActive(true);
+            if (CurrentShield <= 0)
+            {
+                _shield?.SetActive(false);
+            }
+            else
+            {
+                _shield?.SetActive(true);
+            }
         }
 
         foreach (var turret in _turrets)
@@ -109,6 +112,15 @@ public class Ship : MonoBehaviour
             turret.CanFire = IsTargetInRange();
         }
 
+        //var closestTarget = targets.OrderByDescending(x => Vector3.Distance(x.transform.position, transform.position))
+        //    .FirstOrDefault();
+
+        //foreach (var turret in _turrets)
+        //{
+        //    turret.SetTarget(closestTarget);
+        //}
+
+        //var distance = Vector3.Distance(_destination, transform.position);
         if (Mathf.Abs(DestinationDistance) > 1f)
         {
             _destinationCircle.transform.position = _destination;
@@ -176,9 +188,20 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void Attack(Ship target)
+    {
+        SetTarget(target);
+        if (!IsTargetInRange(target))
+        {
+            ApproachToWeaponsRange(target.transform.position);
+        }
+    }
+
     private void ProcessMovement()
     {
         // https://answers.unity.com/questions/29751/gradually-moving-an-object-up-to-speed-rather-then.html
+
+        //var distance = Vector3.Distance(_destination, transform.position);
 
         var dirVector = DestinationVectorLocal;
 
@@ -254,14 +277,14 @@ public class Ship : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 
-    public void Attack(Ship target)
-    {
-        SetTarget(target);
-        if (!IsTargetInRange(target))
-        {
-            ApproachToWeaponsRange(target.transform.position);
-        }
-    }
+    //public void Attack(Target target)
+    //{
+    //    SetTarget(target);
+    //    if (!IsTargetInRange(target))
+    //    {
+    //        ApproachToWeaponsRange(target.transform.position);
+    //    }
+    //}
 
     public void MoveTo(Vector3 destination)
     {
@@ -269,7 +292,7 @@ public class Ship : MonoBehaviour
         _destination = destination;
     }
 
-    //public void ApproachTarget(Ship target)
+    //public void ApproachTarget(Target target)
     //{
     //    ApproachToDistance(target.transform.position, 40.0f + Size/2);
     //}

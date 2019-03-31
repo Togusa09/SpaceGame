@@ -8,6 +8,7 @@
             get { return _instance ?? (_instance = new SelectionManager()); }
         }
 
+
         private Ship _selectedShip;
 
         public void SelectShip(Ship ship)

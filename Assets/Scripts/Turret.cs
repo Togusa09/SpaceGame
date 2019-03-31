@@ -14,6 +14,7 @@ public class Turret : MonoBehaviour
     void Start()
     {
         _barrelTransform = GetComponent<Transform>().Find("Turret/Armature/Turret/Barrel");
+
     }
 
     public bool CanFire = false;
@@ -47,7 +48,10 @@ public class Turret : MonoBehaviour
     }
 
     private Vector3 _turretTarget;
+
     private Vector3 _barrelTarget;
+
+
 
     private bool TrackTarget()
     {
