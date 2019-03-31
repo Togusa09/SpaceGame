@@ -137,6 +137,10 @@ public class Control : MonoBehaviour
                 {
                     //animator.SetBool(UIAnimationControlParameters.ShowDisk, true);
                     _controlState = ControlState.ShowingDisk;
+
+                    var ship = SelectionManager.Instance.GetSelectedShip();
+                    
+                    GetMoveDisk().Activate(ship.gameObject);
                 }
             }
         }
@@ -154,8 +158,7 @@ public class Control : MonoBehaviour
         var moveDisk = GetMoveDisk();
 
         //moveDisk.gameObject.SetActive(true);
-        var ship = SelectionManager.Instance.GetSelectedShip();
-        moveDisk.Activate(ship.gameObject);
+        //
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -178,6 +181,7 @@ public class Control : MonoBehaviour
             var position = moveDisk.HitPoint;
             MovementInformation.SetDestination(position);
             moveDisk.Deactivate();
+            _controlState = ControlState.ProcessMove;
         }
     }
 

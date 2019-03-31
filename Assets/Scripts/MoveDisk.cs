@@ -41,6 +41,7 @@ public class MoveDisk : MonoBehaviour
     {
         _anchorObject = targetObject;
         _verticalOffset = 0;
+        _diskMode = DiskMode.Horizontal;
         gameObject.SetActive(true);
     }
 
