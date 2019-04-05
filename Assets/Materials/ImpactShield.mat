@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shield
-  m_Shader: {fileID: 4800000, guid: f4cb2aef392dba34b95368bf08e1c6d0, type: 3}
-  m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION _GLOSSYREFLECTIONS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-  m_LightmapFlags: 2
+  m_Name: ImpactShield
+  m_Shader: {fileID: 4800000, guid: 5b61ace060ecc87429325ca9dfee697d, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DispTex:
-        m_Texture: {fileID: 2800000, guid: de570a0a6be47d046ade9fe6119a4bd1, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -63,31 +63,30 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Displacement: 0
-    - _DstBlend: 10
-    - _GlossMapScale: 0.455
-    - _Glossiness: 0.409
-    - _GlossyReflections: 0
-    - _Metallic: 0
-    - _Mode: 3
+    - _Displacement: 0.3
+    - _DstBlend: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 0.08
+    - _GlossyReflections: 1
+    - _ImpactRingRefraction: 1
+    - _ImpactSize: 0.38
+    - _Metallic: 0.069
+    - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _SmoothnessTextureChannel: 1
+    - _RefractionAmount: 0.1
+    - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Tess: 11.8
+    - _Tess: 4
     - _UVSec: 0
-    - _Variance: 0.121
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0, g: 0.84705883, b: 0.9607843, a: 0.4}
-    - _EmissionColor: {r: 0.05392157, g: 0.07892157, b: 0.125, a: 1}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.23921569}
+    - _Color: {r: 0.27612138, g: 0.8018868, b: 0.77005196, a: 0.23921569}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PointColor: {r: 0, g: 1, b: 0.32703972, a: 1}
+    - _SpecColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

@@ -66,7 +66,11 @@ public class Ship : MonoBehaviour
         lineRenderer.material.color = Color.green;
         _destinationLine.SetActive(false);
 
-        _shield = transform.Find("Shield")?.gameObject;
+        var shield = transform.Find("Shield");
+        if (shield)
+        {
+            _shield = shield.gameObject;
+        }
     }
 
     private Turret AttachTurret(Transform attachmentNode)
