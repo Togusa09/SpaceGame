@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
@@ -28,7 +27,11 @@ public class Ship : MonoBehaviour
     {
         get
         {
-            if (Target == null) return Vector3.zero;
+            if (Target == null)
+            {
+                return Vector3.zero;
+            }
+
             return transform.position - Target.transform.position;
         }
     }
@@ -133,9 +136,9 @@ public class Ship : MonoBehaviour
             var circleEdge = Vector3.Normalize(new Vector3(moveDir.x, 0, moveDir.z)) * 10f;
 
             var lineRenderer = _destinationLine.GetComponent<LineRenderer>();
-            var points = new[] { _destination + circleEdge, transform.position};
+            var points = new[] { _destination + circleEdge, transform.position };
             lineRenderer.SetPositions(points);
-            _destinationCircle.transform.rotation = Quaternion.identity;;
+            _destinationCircle.transform.rotation = Quaternion.identity; ;
 
             _destinationCircle.SetActive(true);
             _destinationLine.SetActive(true);
@@ -166,7 +169,7 @@ public class Ship : MonoBehaviour
             //var meshColliders = GetComponentsInChildren<MeshCollider>();
 
             //if (!meshColliders.Any()) return 0;
-            
+
             //var bounds = new Bounds();
             //foreach (var meshCollider in meshColliders)
             //{
@@ -277,7 +280,7 @@ public class Ship : MonoBehaviour
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        
+
         Gizmos.DrawWireSphere(transform.position, targetingRange);
     }
 

@@ -11,7 +11,8 @@ public class StatusUiPanel : MonoBehaviour
     private Button _attackButton;
     private Button _stopButton;
 
-    private ProgressBar _healthBar;
+    public CustomProgressBar healthBar;
+    public CustomProgressBar shieldBar;
 
     public Control Control;
 
@@ -23,7 +24,6 @@ public class StatusUiPanel : MonoBehaviour
         _moveButton = transform.Find("MoveButton").GetComponent<Button>();
         _attackButton = transform.Find("AttackButton").GetComponent<Button>();
         _stopButton = transform.Find("StopButton").GetComponent<Button>();
-        _healthBar = transform.Find("HealthBar").GetComponent<ProgressBar>();
 
         // Temporarily disabling these until the functionality is added
         _moveButton.interactable = false;
@@ -37,7 +37,8 @@ public class StatusUiPanel : MonoBehaviour
         {
             _shipName.text = selectedShip.name;
             _shipHealth.text = $"{selectedShip.CurrentHealth}/{selectedShip.MaxHealth}";
-            _healthBar.BarValue = ((float)selectedShip.CurrentHealth / (float)selectedShip.MaxHealth) * 100.0f;
+            healthBar.CurrentValue = ((float)selectedShip.CurrentHealth / (float)selectedShip.MaxHealth);
+            shieldBar.CurrentValue = ((float)selectedShip.CurrentShield / (float)selectedShip.MaxShield);
             _attackButton.interactable = true;
             //_moveButton.interactable = true;
             _stopButton.interactable = true;

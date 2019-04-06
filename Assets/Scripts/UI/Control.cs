@@ -39,6 +39,8 @@ public class Control : MonoBehaviour
     public Texture2D NormalCursor;
     public Texture2D AttackCursor;
 
+    public CameraControl CameraControl;
+
     private void RaycastTarget()
     {
         ClickHitState.Ship = null;
@@ -78,6 +80,33 @@ public class Control : MonoBehaviour
             case ControlState.ProcessMove:
                 ProcessMove();
                 break;
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            CameraControl.MoveNorth();
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            CameraControl.MoveSouth();
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            CameraControl.MoveWest();
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            CameraControl.MoveEast();
+        }
+
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            CameraControl.MoveVertical(Input.mouseScrollDelta.y);
+        }
+
+        if (Input.GetMouseButton(2)) // Right mouse button down
+        {
+            CameraControl.Rotate(Input.GetAxis("Mouse X"));
         }
     }
 
