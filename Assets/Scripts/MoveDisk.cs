@@ -79,7 +79,7 @@ public class MoveDisk : MonoBehaviour
 
         if (_diskMode == DiskMode.Vertical)
         {
-            var verticalPlane = new Plane(Camera.main.transform.forward, _planeHitPoint);
+            var verticalPlane = new Plane(_anchorObject.transform.position, _planeHitPoint, _planeHitPoint + Vector3.up);
 
             if (verticalPlane.Raycast(mouseRay, out var enter))
             {

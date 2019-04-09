@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts;
 using Assets.Scripts.UI;
 using UnityEngine;
@@ -15,6 +16,12 @@ public enum ControlState
 public class Control : MonoBehaviour
 {
     public bool AttackOverride;
+    private DebouncedMouseInput _debouncedMouseInput;
+
+    public Control()
+    {
+        _debouncedMouseInput = new DebouncedMouseInput();
+    }
 
     [HideInInspector] public MovementInformation MovementInformation { get; } = new MovementInformation();
 
@@ -65,6 +72,8 @@ public class Control : MonoBehaviour
 
     void Update()
     {
+        _debouncedMouseInput.Update();
+
         RaycastTarget();
         switch (_controlState)
         {
@@ -80,6 +89,16 @@ public class Control : MonoBehaviour
             case ControlState.ProcessMove:
                 ProcessMove();
                 break;
+        }
+
+        if (_debouncedMouseInput.GetMouseButtonUp(0))
+        {
+            Debug.Log("Button click");
+        }
+
+        if (_debouncedMouseInput.GetMouseButtonHoldDown(0))
+        {
+            Debug.Log("Button hold");
         }
 
         if (Input.GetKey(KeyCode.W))
@@ -130,7 +149,6 @@ public class Control : MonoBehaviour
         {
             if (AttackOverride && ClickHitState.Ship != null)
             {
-                //animator.SetBool(UIAnimationControlParameters.Attacking, true);
                 _controlState = ControlState.Attacking;
             }
             else
@@ -142,7 +160,7 @@ public class Control : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(1))
+        if (_debouncedMouseInput.GetMouseButtonUp(1))
         {
             var selectedShip = SelectionManager.Instance.GetSelectedShip();
             if (selectedShip != null && !selectedShip.IsFixed)
@@ -151,12 +169,10 @@ public class Control : MonoBehaviour
                 {
                     if (ClickHitState.Ship.IsHostile)
                     {
-                        //animator.SetBool(UIAnimationControlParameters.Attacking, true);
                         _controlState = ControlState.Attacking;
                     }
                     else
                     {
-                        //animator.SetBool(UIAnimationControlParameters.Moving, true);
                         _controlState = ControlState.ProcessMove;
                     }
 
@@ -164,7 +180,6 @@ public class Control : MonoBehaviour
                 }
                 else
                 {
-                    //animator.SetBool(UIAnimationControlParameters.ShowDisk, true);
                     _controlState = ControlState.ShowingDisk;
 
                     var ship = SelectionManager.Instance.GetSelectedShip();
@@ -177,24 +192,16 @@ public class Control : MonoBehaviour
 
     public void ShowDiskState()
     {
+        var moveDisk = GetMoveDisk();
+
         if (Input.GetMouseButtonUp(1))
         {
-            //_controlState = ControlState.ShowingDisk;
-            _controlState = ControlState.ProcessMove;
+            _controlState = ControlState.IdleState;
+            moveDisk.Deactivate();
             return;
         }
 
-        var moveDisk = GetMoveDisk();
-
-        //moveDisk.gameObject.SetActive(true);
-        //
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartDebounce();
-        }
-
-        if ((Input.GetMouseButton(0) && HasDebounceCompleted()) || Input.GetKeyDown(KeyCode.LeftShift))
+        if ((_debouncedMouseInput.GetMouseButtonHoldDown(0)) || Input.GetKeyDown(KeyCode.LeftShift))
         {
             moveDisk.SetDiskMode(MoveDisk.DiskMode.Vertical);
         }
@@ -204,7 +211,7 @@ public class Control : MonoBehaviour
             moveDisk.SetDiskMode(MoveDisk.DiskMode.Horizontal);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (_debouncedMouseInput.GetMouseButtonUp(0))
         {
             _controlState = ControlState.ProcessMove;
             var position = moveDisk.HitPoint;
@@ -221,7 +228,6 @@ public class Control : MonoBehaviour
 
         selectedShip.Attack(clickState.Ship);
         AttackOverride = false;
-        //animator.SetBool(UIAnimationControlParameters.Attacking, false);
         _controlState = ControlState.IdleState;
     }
 
@@ -242,20 +248,7 @@ public class Control : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        //animator.SetBool(UIAnimationControlParameters.Moving, false);
         _controlState = ControlState.IdleState;
         ;
-    }
-
-    private float _mouseButtonDownTime;
-    private float _mouseButtonDebounceInterval = 0.2f;
-
-    private void StartDebounce()
-    {
-        _mouseButtonDownTime = Time.time;
-    }
-    private bool HasDebounceCompleted()
-    {
-        return Time.time - _mouseButtonDownTime > _mouseButtonDebounceInterval;
     }
 }

@@ -13,8 +13,6 @@ public class ImpactShield : MonoBehaviour
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
-
-        //var colliders = GetComponentsInChildren<Collider>();
     }
 
     // Update is called once per frame
@@ -34,9 +32,7 @@ public class ImpactShield : MonoBehaviour
         // (If multiple colliders were involved in the collision, 
         // you can find them all by iterating through the contacts)
 
-        var shell = collision.gameObject.GetComponent<Shell>();
-
-        var shieldController = myCollider.GetComponent<ShieldController>();
+         var shieldController = myCollider.GetComponent<ShieldController>();
         var collisionPoint = collision.contacts[0].point;
         
         var localPosition = myCollider.transform.InverseTransformPoint(collisionPoint);
@@ -44,6 +40,12 @@ public class ImpactShield : MonoBehaviour
 
         shieldController.AddImpact(localPosition/ 2);
 
-        Ship.CurrentShield -= shell.Damage;
+        var shell = collision.gameObject.GetComponent<Shell>();
+        if (shell)
+        {
+            Ship.CurrentShield -= shell.Damage;
+            Destroy(shell);
+        }
+        
     }
 }
